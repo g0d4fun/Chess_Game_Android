@@ -3,4 +3,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="start_online">Online</string>
+    <string name="start_multiplayer">Multiplayer</string>
+    <string name="start_single_player">Single Player</string>
+    <string name="startProfile">Profiles</string>
+    <string name="no_profile_choosen">No Profile</string>
 </resources>

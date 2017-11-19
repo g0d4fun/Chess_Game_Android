@@ -4,46 +4,159 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="64dp"
-    android:layout_marginRight="64dp"
+    android:background="@color/startBackground"
+    android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.example.rafa.chesse_board.StartActivity"
-    android:gravity="center">
+    tools:context="com.example.rafa.chesse_board.StartActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
+        android:fontFamily="@font/julius_sans_one"
         android:gravity="center"
         android:text="Chess Game"
-        android:textColor="@android:color/holo_orange_dark"
-        android:textSize="42sp" />
-
-    <Button
+        android:textColor="@color/DARK_TILE_COLOR_HEX"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+    
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="My Profile"
         android:layout_marginBottom="32dp"
-        android:padding="20dp"/>
+        android:orientation="horizontal">
 
-    <Button
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:background="@null"
+                android:fontFamily="@font/julius_sans_one"
+                android:onClick="onClickProfile"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/startProfile"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.6"
+                android:gravity="center_horizontal"
+                android:text="@string/no_profile_choosen" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Single Player"
         android:layout_marginBottom="32dp"
-        android:padding="20dp"/>
+        android:orientation="horizontal">
 
-    <Button
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:background="@null"
+            android:fontFamily="@font/julius_sans_one"
+            android:onClick="onClickSinglePlayer"
+            android:padding="10dp"
+            android:text="@string/start_single_player"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Multiplayer"
         android:layout_marginBottom="32dp"
-        android:padding="20dp"/>
+        android:orientation="horizontal">
 
-    <Button
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:background="@null"
+            android:fontFamily="@font/julius_sans_one"
+            android:onClick="onClickMultiplayer"
+            android:padding="10dp"
+            android:text="@string/start_multiplayer"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Online"
-        android:padding="20dp"/>
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:background="@null"
+            android:fontFamily="@font/julius_sans_one"
+            android:onClick="onClickOnline"
+            android:padding="10dp"
+            android:text="@string/start_online"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DARK_TILE_COLOR_HEX" />
+    </LinearLayout>
 
 </LinearLayout>

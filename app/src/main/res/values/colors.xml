@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Background color-->
+    <color name="startBackground">#FFF3E0</color>
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <!-- Tiles Color -->
     <color name="LIGHT_TILE_COLOR_HEX">#FECD9D</color>
     <color name="DARK_TILE_COLOR_HEX">#D18B47</color>
     <color name="LIGHT_TILE_COLOR_HEX_ON_CLICK">#CBA47D</color>
