@@ -4,6 +4,7 @@ import android.app.Application;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -53,15 +54,16 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-            ((ApplicationState) getApplication()).
-                    setMainActivityState(tiles, model, sourceTile, destinationTile, pieceToBeMoved);
-            outState.putBoolean("Save", true);
+        //((MainActivityState) getApplication()).
+        MainActivityState.getInstance().
+                setMainActivityState(tiles, model, sourceTile, destinationTile, pieceToBeMoved);
+        outState.putBoolean("Save", true);
     }
 
     protected void savedInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.getBoolean("Save")) {
             //From Application
-            ApplicationState state = (ApplicationState) getApplication();
+            MainActivityState state = MainActivityState.getInstance();
             model = state.getModel();
             tiles = state.getTiles();
             sourceTile = state.getSourceTile();

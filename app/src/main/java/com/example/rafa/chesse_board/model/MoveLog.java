@@ -7,6 +7,7 @@ package com.example.rafa.chesse_board.model;
 
 import com.example.rafa.chesse_board.model.board.Move;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author henri
  */
-public class MoveLog {
+public class MoveLog implements Serializable {
     
     private List<Move> moves;
 

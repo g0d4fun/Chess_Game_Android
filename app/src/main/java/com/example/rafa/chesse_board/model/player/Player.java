@@ -8,11 +8,12 @@ import com.example.rafa.chesse_board.model.board.MoveTransition;
 import com.example.rafa.chesse_board.model.pieces.King;
 import com.example.rafa.chesse_board.model.pieces.Piece;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class Player {
+public abstract class Player implements Serializable {
 
     protected final Board board;
     protected final King playerKing;

@@ -2,8 +2,10 @@ package com.example.rafa.chesse_board.model.board;
 
 import com.example.rafa.chesse_board.model.board.Move.MoveStatus;
 
+import java.io.Serializable;
 
-public final class MoveTransition {
+
+public final class MoveTransition implements Serializable {
 
     private final Board fromBoard;
     private final Board toBoard;

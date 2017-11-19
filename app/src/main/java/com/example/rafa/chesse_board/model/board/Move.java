@@ -5,8 +5,10 @@ import com.example.rafa.chesse_board.model.pieces.Pawn;
 import com.example.rafa.chesse_board.model.pieces.Piece;
 import com.example.rafa.chesse_board.model.pieces.Rook;
 
+import java.io.Serializable;
 
-public abstract class Move {
+
+public abstract class Move implements Serializable {
 
     protected final Board board;
     protected final int destinationCoordinate;

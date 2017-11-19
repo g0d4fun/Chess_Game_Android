@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/item_profile_picture"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="3"
         android:src="@drawable/chess_bdt60" />
 
@@ -30,6 +30,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_marginRight="8dp"
+        android:onClick="onClickEdit"
         android:background="@android:color/transparent"
         android:src="@android:drawable/ic_menu_edit" />
 
@@ -38,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:onClick="onClickDelete"
         android:background="@android:color/transparent"
         android:src="@android:drawable/ic_menu_delete" />
 

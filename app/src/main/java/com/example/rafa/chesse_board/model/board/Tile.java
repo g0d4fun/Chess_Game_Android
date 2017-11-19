@@ -11,10 +11,11 @@ import com.example.rafa.chesse_board.model.pieces.Rook;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-abstract public class Tile {
+abstract public class Tile implements Serializable {
 
     private final int tileCoordinate;
 

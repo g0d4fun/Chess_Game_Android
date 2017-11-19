@@ -1,6 +1,5 @@
 package com.example.rafa.chesse_board.profile;
 
-import android.app.Application;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,13 +47,15 @@ public class ProfilesActivity extends AppCompatActivity {
         addProfile("Rafa","..");
         addProfile("Sara","..");
 
-        ListView lv = (ListView) findViewById(R.id.profiles_list);
+        ListView lv = (ListView) this.findViewById(R.id.profiles_list);
         lv.setAdapter(new ProfileListAdapter());
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(ProfilesActivity.this,">> "+i+";"+l+":",Toast.LENGTH_SHORT).show();
+                //profileData.remove(i);
+
             }
         });
     }
@@ -68,6 +70,10 @@ public class ProfilesActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
+    }
+
+    public void toast(String text){
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     class ProfileListAdapter extends BaseAdapter {
@@ -90,7 +96,7 @@ public class ProfilesActivity extends AppCompatActivity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View layout = getLayoutInflater().inflate(R.layout.item_profile_list,null);
-
+            final int index = i;
             String nickname = (String) profileData.get(i).get("nickname");
             String imagePath = (String) profileData.get(i).get("imagePath");
             Boolean isCurrentProfile = (Boolean) profileData.get(i).get("isCurrentProfile");
@@ -98,6 +104,24 @@ public class ProfilesActivity extends AppCompatActivity {
             ((ImageView)layout.findViewById(R.id.item_profile_picture)).setImageResource(R.drawable.chess_blt60);
             ((TextView)layout.findViewById(R.id.item_profile_nickname)).setText(nickname);
 
+            ImageButton edit = (ImageButton) layout.findViewById(R.id.item_profile_edit);
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Intent intent = new Intent(this,ProfileEditor.class);
+                    toast("Profile Editor");
+                    //startActivity(intent);
+                }
+            });
+            ImageButton delete = (ImageButton) layout.findViewById(R.id.item_profile_remove);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toast("Index:" + index);
+                    profileData.remove(index);
+                    notifyDataSetChanged();
+                }
+            });
             return layout;
         }
     }

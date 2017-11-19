@@ -4,10 +4,11 @@ import com.example.rafa.chesse_board.model.Alliance;
 import com.example.rafa.chesse_board.model.board.Board;
 import com.example.rafa.chesse_board.model.board.Move;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 
-public abstract class Piece {
+public abstract class Piece implements Serializable {
 
     final PieceType pieceType;
     final Alliance pieceAlliance;

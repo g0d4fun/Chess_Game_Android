@@ -14,13 +14,14 @@ import com.example.rafa.chesse_board.model.player.BlackPlayer;
 import com.example.rafa.chesse_board.model.player.Player;
 import com.example.rafa.chesse_board.model.player.WhitePlayer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class Board {
+public final class Board implements Serializable {
 
     private final List<Tile> gameBoard;
     private final List<Piece> whitePieces;

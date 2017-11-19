@@ -13,6 +13,7 @@ import com.example.rafa.chesse_board.model.board.MoveTransition;
 import com.example.rafa.chesse_board.model.board.Tile;
 import com.example.rafa.chesse_board.model.pieces.Piece;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -21,7 +22,7 @@ import java.util.Collections;
  *
  * @author rafa
  */
-public class ModelChess {
+public class ModelChess implements Serializable {
 
     protected Board chessBoard;
     protected MoveTransition transition;
