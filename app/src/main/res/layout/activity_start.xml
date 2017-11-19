@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="64dp"
+    android:layout_marginRight="64dp"
+    android:orientation="vertical"
+    tools:context="com.example.rafa.chesse_board.StartActivity"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:gravity="center"
+        android:text="Chess Game"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="42sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Profile"
+        android:layout_marginBottom="32dp"
+        android:padding="20dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Single Player"
+        android:layout_marginBottom="32dp"
+        android:padding="20dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Multiplayer"
+        android:layout_marginBottom="32dp"
+        android:padding="20dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Online"
+        android:padding="20dp"/>
+
+</LinearLayout>
