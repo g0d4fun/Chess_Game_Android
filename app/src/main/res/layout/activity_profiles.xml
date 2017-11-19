@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.rafa.chesse_board.ProfilesActivity">
+    android:orientation="horizontal"
+    tools:context="com.example.rafa.chesse_board.profile.ProfilesActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/DARK_TILE_COLOR_HEX"/>
+
+    <ListView
+        android:id="@+id/profiles_list"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="60"
+        android:background="@color/startBackground"
+        android:padding="16dp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/DARK_TILE_COLOR_HEX"/>
+</LinearLayout>

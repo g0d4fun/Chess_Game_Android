@@ -1,5 +1,6 @@
 package com.example.rafa.chesse_board;
 
+import android.app.Application;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,6 @@ import com.example.rafa.chesse_board.model.board.BoardUtils;
 import com.example.rafa.chesse_board.model.board.Move;
 import com.example.rafa.chesse_board.model.board.Tile;
 import com.example.rafa.chesse_board.model.pieces.Piece;
-import com.google.common.primitives.Ints;
 
 import java.util.Arrays;
 
@@ -37,14 +37,40 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         int boardWidth = chessBoardLayout.getWidth();
         chessBoardLayout.setMinimumHeight(boardWidth);
 
-        model = new Model();
-        model.startNewGame();
-        tiles = setUpButtons();
+        if (savedInstanceState != null && savedInstanceState.getBoolean("Save"))
+            savedInstanceState(savedInstanceState);
+        else {
+            model = new Model();
+            model.startNewGame();
+            tiles = setUpButtons();
+        }
         setUpListeners();
         renderGame();
     }
     //chessBoardLayout
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+            ((ApplicationState) getApplication()).
+                    setMainActivityState(tiles, model, sourceTile, destinationTile, pieceToBeMoved);
+            outState.putBoolean("Save", true);
+    }
+
+    protected void savedInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.getBoolean("Save")) {
+            //From Application
+            ApplicationState state = (ApplicationState) getApplication();
+            model = state.getModel();
+            tiles = state.getTiles();
+            sourceTile = state.getSourceTile();
+            destinationTile = state.getDestinationTile();
+            pieceToBeMoved = state.getPieceToBeMoved();
+        } else {
+            //From intent
+        }
+    }
 
     /**
      * @return ImageButton initialized with id game cells

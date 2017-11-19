@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.example.rafa.chesse_board.profile.ProfilesActivity;
+
 public class StartActivity extends AppCompatActivity {
 
     @Override
@@ -21,8 +23,9 @@ public class StartActivity extends AppCompatActivity {
     }
 
     protected void onClickProfile(View v){
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this,ProfilesActivity.class);
         Toast.makeText(this, "Profile Edit", Toast.LENGTH_SHORT).show();
+        startActivity(intent);
     }
 
     protected void onClickSinglePlayer(View v){
