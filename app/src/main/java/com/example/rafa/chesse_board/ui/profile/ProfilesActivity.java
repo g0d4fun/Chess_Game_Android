@@ -1,5 +1,6 @@
-package com.example.rafa.chesse_board.profile;
+package com.example.rafa.chesse_board.ui.profile;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rafa.chesse_board.ApplicationState;
 import com.example.rafa.chesse_board.R;
 
 import java.util.ArrayList;
@@ -37,9 +37,8 @@ public class ProfilesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("Profiles");
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setElevation(0);
+        //actionBar.setElevation(0);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
         setContentView(R.layout.activity_profiles);
 
         profileData = new ArrayList<>();
@@ -76,6 +75,12 @@ public class ProfilesActivity extends AppCompatActivity {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
+    public void launchEditorActivity(View v){
+        Intent intent = new Intent(this,ProfileEditorActivity.class);
+        toast("Profile Editor");
+        startActivity(intent);
+    }
+
     class ProfileListAdapter extends BaseAdapter {
 
         @Override
@@ -108,9 +113,7 @@ public class ProfilesActivity extends AppCompatActivity {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Intent intent = new Intent(this,ProfileEditor.class);
-                    toast("Profile Editor");
-                    //startActivity(intent);
+                    launchEditorActivity(view);
                 }
             });
             ImageButton delete = (ImageButton) layout.findViewById(R.id.item_profile_remove);

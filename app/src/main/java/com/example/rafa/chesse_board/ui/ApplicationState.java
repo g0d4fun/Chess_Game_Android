@@ -1,13 +1,6 @@
-package com.example.rafa.chesse_board;
+package com.example.rafa.chesse_board.ui;
 
 import android.app.Application;
-import android.widget.ImageButton;
-
-import com.example.rafa.chesse_board.model.Model;
-import com.example.rafa.chesse_board.model.board.Tile;
-import com.example.rafa.chesse_board.model.pieces.Piece;
-
-import java.io.FileOutputStream;
 
 /**
  * Created by henri on 11/19/2017.

@@ -4,12 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context=".ui.profile.ProfilesActivity">
+    tools:context="com.example.rafa.chesse_board.ui.profile.ProfileInfoActivity"
+    android:background="@color/startBackground">
 
-    <ListView
-        android:id="@+id/profiles_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/startBackground" />
 </LinearLayout>

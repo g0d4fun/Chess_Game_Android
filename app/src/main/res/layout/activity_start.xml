@@ -19,7 +19,7 @@
         android:textColor="@color/DARK_TILE_COLOR_HEX"
         android:textSize="40sp"
         android:textStyle="bold" />
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,9 +27,8 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
 
         <LinearLayout
@@ -61,9 +60,8 @@
         </LinearLayout>
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
     </LinearLayout>
 
@@ -74,9 +72,8 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
 
         <Button
@@ -92,9 +89,8 @@
             android:textStyle="bold" />
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
     </LinearLayout>
 
@@ -105,9 +101,8 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
 
         <Button
@@ -123,9 +118,8 @@
             android:textStyle="bold" />
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
     </LinearLayout>
 
@@ -135,9 +129,8 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
 
         <Button
@@ -153,9 +146,8 @@
             android:textStyle="bold" />
 
         <View
-            android:layout_width="0dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/DARK_TILE_COLOR_HEX" />
     </LinearLayout>
 
