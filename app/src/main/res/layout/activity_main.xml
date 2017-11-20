@@ -45,43 +45,43 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/light_queen_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_qlt60" />
 
                 <ImageView
+                    android:id="@+id/light_bishops_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_blt60" />
 
                 <ImageView
+                    android:id="@+id/light_knights_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_nlt60" />
 
                 <ImageView
+                    android:id="@+id/light_rooks_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_rlt60" />
 
 
@@ -92,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/light_queen_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -99,6 +100,7 @@
                     android:gravity="center_horizontal"/>
 
                 <TextView
+                    android:id="@+id/light_bishops_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -106,6 +108,7 @@
                     android:gravity="center_horizontal"/>
 
                 <TextView
+                    android:id="@+id/light_knights_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -113,6 +116,7 @@
                     android:gravity="center_horizontal"/>
 
                 <TextView
+                    android:id="@+id/light_rooks_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -606,43 +610,43 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/dark_queen_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_qdt60"/>
 
                 <ImageView
+                    android:id="@+id/dark_bishops_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_bdt60"/>
 
                 <ImageView
+                    android:id="@+id/dark_knights_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_ndt60"/>
 
                 <ImageView
+                    android:id="@+id/dark_rooks_captured_picture"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:alpha=".3"
                     android:src="@drawable/chess_rdt60"/>
             </LinearLayout>
 
@@ -651,6 +655,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/dark_queen_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -658,6 +663,7 @@
                     android:gravity="center_horizontal"/>
 
                 <TextView
+                    android:id="@+id/dark_bishops_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -665,6 +671,7 @@
                     android:gravity="center_horizontal"/>
 
                 <TextView
+                    android:id="@+id/dark_knights_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -672,6 +679,7 @@
                     android:gravity="center_horizontal"/>
 
                 <TextView
+                    android:id="@+id/dark_rooks_captured"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
