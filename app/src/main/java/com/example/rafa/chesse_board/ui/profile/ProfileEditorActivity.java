@@ -4,6 +4,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
 
@@ -29,5 +31,13 @@ public class ProfileEditorActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
+    }
+
+    private void onClickTakePicture(View v){
+        Toast.makeText(this, "Take Picture", Toast.LENGTH_SHORT).show();
+    }
+
+    private void onClickSubmit(View v){
+        Toast.makeText(this, "Submit", Toast.LENGTH_SHORT).show();
     }
 }

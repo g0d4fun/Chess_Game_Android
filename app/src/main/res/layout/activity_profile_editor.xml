@@ -24,6 +24,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/profile_picture"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
                 android:layout_width="match_parent"
@@ -31,6 +32,8 @@
                 android:layout_weight="1"/>
 
             <Button
+                android:onClick="onClickTakePicture"
+                android:id="@+id/take_picture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/julius_sans_one"
@@ -69,6 +72,7 @@
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/nickname_editor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -90,6 +94,8 @@
             android:background="@color/DARK_TILE_COLOR_HEX" />
 
         <Button
+            android:id="@+id/submit"
+            android:onClick="onClickSubmit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

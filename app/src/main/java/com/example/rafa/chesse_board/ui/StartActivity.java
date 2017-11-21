@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
-import com.example.rafa.chesse_board.ui.profile.ProfilesActivity;
+import com.example.rafa.chesse_board.ui.profile.ProfileInfoActivity;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -22,7 +22,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     protected void onClickProfile(View v){
-        Intent intent = new Intent(this,ProfilesActivity.class);
+        Intent intent = new Intent(this,ProfileInfoActivity.class);
         Toast.makeText(this, "Profile Edit", Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }

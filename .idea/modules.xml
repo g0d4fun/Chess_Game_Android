@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Chess_Game_Android.iml" filepath="$PROJECT_DIR$/Chess_Game_Android.iml" />
+      <module fileurl="file://C:\Users\rafa\Documents\GitHub\Chess_Game_Android\Chess_Game_Android.iml" filepath="C:\Users\rafa\Documents\GitHub\Chess_Game_Android\Chess_Game_Android.iml" />
       <module fileurl="file://C:\Users\henri\Documents\GitHub\Chess_Game_Android\Chesse_Board.iml" filepath="C:\Users\henri\Documents\GitHub\Chess_Game_Android\Chesse_Board.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\rafa\Documents\GitHub\Chess_Game_Android\app\app.iml" filepath="C:\Users\rafa\Documents\GitHub\Chess_Game_Android\app\app.iml" />
     </modules>
   </component>
 </project>

@@ -20,7 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.profile.ProfilesActivity" />
         <activity android:name=".ui.profile.ProfileEditorActivity" />
         <activity android:name=".ui.profile.ProfileInfoActivity"></activity>
     </application>
