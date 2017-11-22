@@ -41,8 +41,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_info);
 
         profileData = new ArrayList<>();
-        addProfile("Rafa", "aa");
-        addProfile("Sara","aa");
+        addProfile("Bot", null);
+        addProfile("Bot",null);
 
         ListView lv = (ListView) this.findViewById(R.id.profiles_list);
         lv.setAdapter(new ProfileListAdapter());
@@ -106,7 +106,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
             String imagePath = (String) profileData.get(i).get("imagePath");
             Boolean isCurrentProfile = (Boolean) profileData.get(i).get("isCurrentProfile");
 
-            ((ImageView) layout.findViewById(R.id.item_profile_picture)).setImageResource(R.drawable.chess_blt60);
+            ((ImageView) layout.findViewById(R.id.item_profile_picture)).setImageResource(R.drawable.chess_bot);
             ((TextView) layout.findViewById(R.id.item_profile_nickname)).setText(nickname);
 
             notifyDataSetChanged();

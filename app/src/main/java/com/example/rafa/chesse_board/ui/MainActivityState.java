@@ -54,26 +54,6 @@ public class MainActivityState extends Application {
         writeSerializedState();
     }
 
-    public static ImageButton[] getTiles() {
-        return obj.wrapper.tiles;
-    }
-
-    public static Model getModel() {
-        return obj.wrapper.model;
-    }
-
-    public static Tile getSourceTile() {
-        return obj.wrapper.sourceTile;
-    }
-
-    public static Tile getDestinationTile() {
-        return obj.wrapper.destinationTile;
-    }
-
-    public static Piece getPieceToBeMoved() {
-        return obj.wrapper.pieceToBeMoved;
-    }
-
     private static void writeSerializedState() {
         try {
             FileOutputStream fos = obj.openFileOutput("MainActivityState.dat", MODE_PRIVATE);

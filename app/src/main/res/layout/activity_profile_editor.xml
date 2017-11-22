@@ -29,7 +29,8 @@
                 android:layout_marginRight="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:src="@drawable/chess_sporting"/>
 
             <Button
                 android:onClick="onClickTakePicture"
@@ -74,7 +75,8 @@
             <EditText
                 android:id="@+id/nickname_editor"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Rafa"/>
         </LinearLayout>
 
         <View

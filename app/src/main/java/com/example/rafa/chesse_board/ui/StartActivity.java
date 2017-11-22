@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
+import com.example.rafa.chesse_board.model.GameMode;
 import com.example.rafa.chesse_board.ui.profile.ProfileInfoActivity;
 
 public class StartActivity extends AppCompatActivity {
@@ -29,16 +30,19 @@ public class StartActivity extends AppCompatActivity {
 
     protected void onClickSinglePlayer(View v){
         Intent intent = new Intent(this,MainActivity.class);
-        Toast.makeText(this, "Single Player Game Started", Toast.LENGTH_SHORT).show();
+        intent.putExtra("game_mode",GameMode.SINGLE_PLAYER.toString());
         startActivity(intent);
     }
 
     protected void onClickMultiplayer(View v){
-        Toast.makeText(this, "Multiplayer Game ", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("game_mode",GameMode.MULTIPLAYER.toString());
+        startActivity(intent);
     }
 
     protected void onClickOnline(View v){
-        Toast.makeText(this, "Online Game ", Toast.LENGTH_SHORT).show();
-
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("game_mode",GameMode.ONLINE.toString());
+        startActivity(intent);
     }
 }

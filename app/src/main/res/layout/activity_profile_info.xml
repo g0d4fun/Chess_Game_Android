@@ -11,9 +11,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="8dp">
+        android:layout_weight="1">
 
         <View
             android:layout_width="4dp"
@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:layout_weight="2"
-            android:background="@drawable/chess_bot"/>
+            android:background="@drawable/chess_sporting" />
 
         <TextView
             android:layout_width="0dp"
@@ -55,18 +55,21 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Score History"
-            android:gravity="center"
             android:fontFamily="@font/julius_sans_one"
-            android:textSize="20sp"/>
+            android:gravity="center"
+            android:text="Score History"
+            android:textSize="20sp" />
+
         <ListView
-        android:id="@+id/profiles_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/startBackground" />
+            android:id="@+id/profiles_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/startBackground"
+            android:divider="@null"/>
     </LinearLayout>
 
 </LinearLayout>

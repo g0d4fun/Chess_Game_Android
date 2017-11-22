@@ -4,6 +4,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,28 +16,36 @@ import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
 import com.example.rafa.chesse_board.model.Alliance;
+import com.example.rafa.chesse_board.model.GameMode;
 import com.example.rafa.chesse_board.model.Model;
+import com.example.rafa.chesse_board.model.board.Board;
 import com.example.rafa.chesse_board.model.board.BoardUtils;
 import com.example.rafa.chesse_board.model.board.Move;
 import com.example.rafa.chesse_board.model.board.Tile;
 import com.example.rafa.chesse_board.model.pieces.Piece;
+import com.google.common.collect.Lists;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import static com.example.rafa.chesse_board.model.board.BoardUtils.NUM_TILES;
 
 public class MainActivity extends AppCompatActivity implements UIConstants {
 
-    private static int hh = 0;
     private ImageButton[] tiles;
     private Model model;
     private Tile sourceTile, destinationTile;
     private Piece pieceToBeMoved;
 
+    protected BoardDirection direction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        direction = BoardDirection.NORMAL;
 
         LinearLayout chessBoardLayout = findViewById(R.id.chess_board);
         int boardWidth = chessBoardLayout.getWidth();
@@ -43,10 +54,18 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         if (savedInstanceState != null && savedInstanceState.getBoolean("Save"))
             savedInstanceState(savedInstanceState);
         else {
+            // New Game
             model = new Model();
-            model.startNewGame();
-            tiles = setUpButtons();
+            String temp = getIntent().getStringExtra("game_mode");
+            if (temp.equalsIgnoreCase(GameMode.SINGLE_PLAYER.toString())) {
+                model.startNewGame(GameMode.SINGLE_PLAYER);
+            } else if (temp.equalsIgnoreCase(GameMode.MULTIPLAYER.toString())) {
+                model.startNewGame(GameMode.MULTIPLAYER);
+            } else if (temp.equalsIgnoreCase(GameMode.ONLINE.toString()))
+                model.startNewGame(GameMode.ONLINE);
+            Toast.makeText(this, "Mode: " + model.getGameMode(), Toast.LENGTH_SHORT).show();
         }
+        tiles = setUpButtons();
         setUpListeners();
         renderGame();
     }
@@ -56,21 +75,44 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //((MainActivityState) getApplication()).
-        //MainActivityState.getInstance().
-        //        setMainActivityState(tiles, model, sourceTile, destinationTile, pieceToBeMoved);
-        //outState.putBoolean("Save", true);
+        ((ApplicationState) getApplication()).save(tiles, model, sourceTile, destinationTile, pieceToBeMoved);
+        outState.putBoolean("Save", true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_flip_board:
+                Toast.makeText(this, "Flip Board", Toast.LENGTH_SHORT).show();
+                direction = direction.opposite();
+                renderGame();
+                break;
+            case R.id.item_give_up:
+                Toast.makeText(this, "Given Up", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.menu_game, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     protected void savedInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.getBoolean("Save")) {
             //From Application
-            MainActivityState state = MainActivityState.getInstance();
+            ApplicationState state = (ApplicationState) getApplication();
             model = state.getModel();
             tiles = state.getTiles();
             sourceTile = state.getSourceTile();
             destinationTile = state.getDestinationTile();
             pieceToBeMoved = state.getPieceToBeMoved();
+            Toast.makeText(state, "Get Saved Instance", Toast.LENGTH_SHORT).show();
         } else {
             //From intent
         }
@@ -82,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
      */
     public ImageButton[] setUpButtons() {
 
-        ImageButton[] tiles = new ImageButton[BoardUtils.NUM_TILES];
+        ImageButton[] tiles = new ImageButton[NUM_TILES];
 
         // First Row
         tiles[0] = findViewById(R.id.cell_a8);
@@ -202,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
     public void renderGame() {
         // Draw Tiles
-        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
+        for (int i = 0; i < NUM_TILES; i++) {
             int column = i / 8;
             int row = i - column * 8;
 
@@ -211,13 +253,13 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             else // White Color
                 tiles[i].setBackgroundColor(getResources().getColor(R.color.DARK_TILE_COLOR_HEX));
 
-            if (sourceTile == model.getBoard().getTile(i))
+            if (sourceTile == direction.traverse(model.getBoard().getGameBoard()).get(i))
                 if ((row % 2) == (column % 2))
                     tiles[i].setBackgroundColor(getResources().getColor(R.color.LIGHT_TILE_COLOR_HEX_ON_CLICK));
                 else
                     tiles[i].setBackgroundColor(getResources().getColor(R.color.DARK_TILE_COLOR_HEX_ON_CLICK));
 
-            Tile tile = model.getBoard().getTile(i);
+            Tile tile = direction.traverse(model.getBoard().getGameBoard()).get(i);
             for (Move move : model.pieceLegalMoves(pieceToBeMoved)) {
                 if (move.getDestinationCoordinate() == tile.getTileCoordinate()) {
                     if (tile.getPiece() != null)
@@ -229,15 +271,17 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         }
 
 
+        List<Tile> tilesReversed = direction.traverse(model.getBoard().getGameBoard());
         // Draw Pieces
-        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
-            Integer drawableValue = getDrawableByPieceName(model.getBoard().getTile(i));
+        for (int i = 0; i < NUM_TILES; i++) {
+            Integer drawableValue = getDrawableByPieceName(tilesReversed.get(i));
             if (drawableValue != null)
                 tiles[i].setImageResource(drawableValue);
             else
                 tiles[i].setImageResource(android.R.color.transparent);
         }
 
+        // Current Player Viewer
         TextView player1 = findViewById(R.id.Player1);
         TextView player2 = findViewById(R.id.Player2);
         if (model.getCurrentPlayer().isWhite()) {
@@ -299,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     }
 
 
-    public void updatePiecesCaptured(){
+    public void updatePiecesCaptured() {
         int lightRooks = 2;
         int lightKnights = 2;
         int lightBishops = 2;
@@ -308,32 +352,31 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         int darkKnights = 2;
         int darkBishops = 2;
         int darkQueen = 1;
-        hh++;
+
         //How many pieces captures
         Iterable<Piece> pieces = model.getBoard().getAllPieces();
-        for(Piece piece : pieces){
-            Log.i("Raven",piece.getPieceType().toString() + " " + piece.getPieceAllegiance().toString() + "hh:" + hh);
-            switch (piece.getPieceType()){
+        for (Piece piece : pieces) {
+            switch (piece.getPieceType()) {
                 case ROOK:
-                    if(piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack())
                         darkRooks--;
                     else
                         lightRooks--;
                     break;
                 case KNIGHT:
-                    if(piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack())
                         darkKnights--;
                     else
                         lightKnights--;
                     break;
                 case BISHOP:
-                    if(piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack())
                         darkBishops--;
                     else
                         lightBishops--;
                     break;
                 case QUEEN:
-                    if(piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack())
                         darkQueen--;
                     else
                         lightQueen--;
@@ -341,35 +384,35 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             }
         }
         // Light Captured
-        editTextViewText(R.id.light_queen_captured,String.valueOf(lightQueen));
-        editTextViewText(R.id.light_bishops_captured,String.valueOf(lightBishops));
-        editTextViewText(R.id.light_knights_captured,String.valueOf(lightKnights));
-        editTextViewText(R.id.light_rooks_captured,String.valueOf(lightRooks));
-        capturedPiecesOpacity(R.id.light_queen_captured_picture,lightQueen);
-        capturedPiecesOpacity(R.id.light_bishops_captured_picture,lightBishops);
-        capturedPiecesOpacity(R.id.light_knights_captured_picture,lightKnights);
-        capturedPiecesOpacity(R.id.light_rooks_captured_picture,lightRooks);
+        editTextViewText(R.id.light_queen_captured, String.valueOf(lightQueen));
+        editTextViewText(R.id.light_bishops_captured, String.valueOf(lightBishops));
+        editTextViewText(R.id.light_knights_captured, String.valueOf(lightKnights));
+        editTextViewText(R.id.light_rooks_captured, String.valueOf(lightRooks));
+        capturedPiecesOpacity(R.id.light_queen_captured_picture, lightQueen);
+        capturedPiecesOpacity(R.id.light_bishops_captured_picture, lightBishops);
+        capturedPiecesOpacity(R.id.light_knights_captured_picture, lightKnights);
+        capturedPiecesOpacity(R.id.light_rooks_captured_picture, lightRooks);
 
         // Dark Captured
-        editTextViewText(R.id.dark_queen_captured,String.valueOf(darkQueen));
-        editTextViewText(R.id.dark_bishops_captured,String.valueOf(darkBishops));
-        editTextViewText(R.id.dark_knights_captured,String.valueOf(darkKnights));
-        editTextViewText(R.id.dark_rooks_captured,String.valueOf(darkRooks));
-        capturedPiecesOpacity(R.id.dark_queen_captured_picture,darkQueen);
-        capturedPiecesOpacity(R.id.dark_bishops_captured_picture,darkBishops);
-        capturedPiecesOpacity(R.id.dark_knights_captured_picture,darkKnights);
-        capturedPiecesOpacity(R.id.dark_rooks_captured_picture,darkRooks);
+        editTextViewText(R.id.dark_queen_captured, String.valueOf(darkQueen));
+        editTextViewText(R.id.dark_bishops_captured, String.valueOf(darkBishops));
+        editTextViewText(R.id.dark_knights_captured, String.valueOf(darkKnights));
+        editTextViewText(R.id.dark_rooks_captured, String.valueOf(darkRooks));
+        capturedPiecesOpacity(R.id.dark_queen_captured_picture, darkQueen);
+        capturedPiecesOpacity(R.id.dark_bishops_captured_picture, darkBishops);
+        capturedPiecesOpacity(R.id.dark_knights_captured_picture, darkKnights);
+        capturedPiecesOpacity(R.id.dark_rooks_captured_picture, darkRooks);
 
     }
 
-    public void editTextViewText(int id,String text){
-        ((TextView)findViewById(id)).setText(text);
+    public void editTextViewText(int id, String text) {
+        ((TextView) findViewById(id)).setText(text);
     }
 
-    public void capturedPiecesOpacity(int id, int numberCaptured){
-        if(numberCaptured > 0)
-            ((ImageView)findViewById(id)).setImageAlpha(255);
+    public void capturedPiecesOpacity(int id, int numberCaptured) {
+        if (numberCaptured > 0)
+            ((ImageView) findViewById(id)).setImageAlpha(255);
         else
-            ((ImageView)findViewById(id)).setImageAlpha(80);
+            ((ImageView) findViewById(id)).setImageAlpha(80);
     }
 }

@@ -13,40 +13,48 @@
         android:id="@+id/item_profile_picture"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:src="@drawable/chess_bdt60" />
+        android:layout_weight="4"
+        android:src="@drawable/chess_bot" />
 
-    <TextView
-        android:id="@+id/item_profile_nickname"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="10"
-        android:fontFamily="@font/julius_sans_one"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/item_profile_game_mode"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:fontFamily="@font/julius_sans_one"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"
+            android:text="Single Player"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/item_profile_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/julius_sans_one"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"
+            android:text="Bot"
+            android:textSize="20sp" />
+    </LinearLayout>
 
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:text="Single Player"
-        android:textSize="24sp"
-        android:textStyle="bold" />
 
-    <ImageButton
+    <TextView
         android:id="@+id/item_profile_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginRight="8dp"
-        android:onClick="onClickEdit"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="4"
         android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_edit" />
-
-    <ImageButton
-        android:id="@+id/item_profile_remove"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:onClick="onClickDelete"
-        android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_delete" />
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="16dp"
+        android:text="Lose"
+        android:textStyle="italic" />
 
     <View
         android:layout_width="4dp"

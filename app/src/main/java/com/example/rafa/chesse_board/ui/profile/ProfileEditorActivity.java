@@ -33,11 +33,11 @@ public class ProfileEditorActivity extends AppCompatActivity {
         }
     }
 
-    private void onClickTakePicture(View v){
+    protected void onClickTakePicture(View v){
         Toast.makeText(this, "Take Picture", Toast.LENGTH_SHORT).show();
     }
 
-    private void onClickSubmit(View v){
+    protected void onClickSubmit(View v){
         Toast.makeText(this, "Submit", Toast.LENGTH_SHORT).show();
     }
 }
