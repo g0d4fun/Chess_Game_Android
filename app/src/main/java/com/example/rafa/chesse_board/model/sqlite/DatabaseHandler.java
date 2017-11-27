@@ -85,8 +85,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         GameScore score = new GameScore(
-                GameMode.valueOf(cursor.getString(1)),
-                GameResult.valueOf(cursor.getString(2)),
+                GameMode.builder(cursor.getString(1)),
+                GameResult.builder(cursor.getString(2)),
                 cursor.getString(3));
         return score;
     }
@@ -103,8 +103,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 GameScore score = new GameScore(
-                        GameMode.valueOf(cursor.getString(1)),
-                        GameResult.valueOf(cursor.getString(2)),
+                        GameMode.builder(cursor.getString(1)),
+                        GameResult.builder(cursor.getString(2)),
                         cursor.getString(3));
                 // Adding contact to list
                 scores.add(score);

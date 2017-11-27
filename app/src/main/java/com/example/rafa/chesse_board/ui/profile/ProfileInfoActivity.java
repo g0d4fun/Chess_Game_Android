@@ -15,25 +15,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
+import com.example.rafa.chesse_board.model.GameMode;
+import com.example.rafa.chesse_board.model.GameResult;
 import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
+import com.example.rafa.chesse_board.model.sqlite.GameScore;
 import com.example.rafa.chesse_board.model.sqlite.Profile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ProfileInfoActivity extends AppCompatActivity {
 
     private Profile profile;
     private DatabaseHandler db;
 
-    ArrayList<HashMap<String, Object>> profileData;
+    ArrayList<HashMap<String, Object>> gameScores;
 
-    void addProfile(String name, String imagePath) {
+    void addProfile(String name, GameMode gameMode, GameResult result, String imagePath) {
         HashMap<String, Object> hm = new HashMap<>();
         hm.put("nickname", name);
-        hm.put("imagePath", imagePath);
-        hm.put("isCurrentProfile", Boolean.TRUE);
-        profileData.add(hm);
+        hm.put("game_mode",gameMode.toString());
+        hm.put("result",result.toString());
+        hm.put("image_path", imagePath);
+        gameScores.add(hm);
     }
 
     @Override
@@ -55,9 +60,10 @@ public class ProfileInfoActivity extends AppCompatActivity {
         TextView nickname = findViewById(R.id.profile_info_nickname);
         nickname.setText(profile.getNickName());
 
-        profileData = new ArrayList<>();
-        addProfile("Bot", null);
-        addProfile("Bot",null);
+        gameScores = new ArrayList<>();
+        List<GameScore> scores = db.getAllScores();
+        for(GameScore score : scores)
+            addProfile(score.getOpponentNickName(),score.getMode(),score.getResult(),null);
 
         ListView lv = (ListView) this.findViewById(R.id.profiles_list);
         lv.setAdapter(new ProfileListAdapter());
@@ -100,12 +106,12 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return profileData.size();
+            return gameScores.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return profileData.get(i);
+            return gameScores.get(i);
         }
 
         @Override
@@ -117,12 +123,15 @@ public class ProfileInfoActivity extends AppCompatActivity {
         public View getView(int i, View view, ViewGroup viewGroup) {
             View layout = getLayoutInflater().inflate(R.layout.item_profile_list, null);
             final int index = i;
-            String nickname = (String) profileData.get(i).get("nickname");
-            String imagePath = (String) profileData.get(i).get("imagePath");
-            Boolean isCurrentProfile = (Boolean) profileData.get(i).get("isCurrentProfile");
+            String nickname = (String) gameScores.get(i).get("nickname");
+            String gameMode = (String) gameScores.get(i).get("game_mode");
+            String result = (String) gameScores.get(i).get("result");
+            String imagePath = (String) gameScores.get(i).get("imagePath");
 
             ((ImageView) layout.findViewById(R.id.item_profile_picture)).setImageResource(R.drawable.chess_bot);
             ((TextView) layout.findViewById(R.id.item_profile_nickname)).setText(nickname);
+            ((TextView) layout.findViewById(R.id.item_profile_game_mode)).setText(gameMode);
+            ((TextView) layout.findViewById(R.id.item_game_result)).setText(result);
 
             notifyDataSetChanged();
             return layout;

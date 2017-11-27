@@ -1,7 +1,10 @@
 package com.example.rafa.chesse_board.ui;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.example.rafa.chesse_board.R;
 import com.example.rafa.chesse_board.model.Alliance;
 import com.example.rafa.chesse_board.model.GameMode;
+import com.example.rafa.chesse_board.model.GameResult;
 import com.example.rafa.chesse_board.model.Model;
 import com.example.rafa.chesse_board.model.board.Board;
 import com.example.rafa.chesse_board.model.board.BoardUtils;
@@ -24,6 +28,7 @@ import com.example.rafa.chesse_board.model.board.Move;
 import com.example.rafa.chesse_board.model.board.Tile;
 import com.example.rafa.chesse_board.model.pieces.Piece;
 import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
+import com.example.rafa.chesse_board.model.sqlite.GameScore;
 import com.example.rafa.chesse_board.model.sqlite.Profile;
 import com.google.common.collect.Lists;
 
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
     private Profile profile;
     private DatabaseHandler db;
+
+    private AlertDialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +89,11 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         }
         tiles = setUpButtons();
         setUpListeners();
+        setUpDialog();
         renderGame();
     }
     //chessBoardLayout
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -103,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 break;
             case R.id.item_give_up:
                 Toast.makeText(this, "Given Up", Toast.LENGTH_SHORT).show();
+                alert.show();
                 break;
         }
 
@@ -130,6 +139,12 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         } else {
             //From intent
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        alert.show();
     }
 
     /**
@@ -427,5 +442,40 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             ((ImageView) findViewById(id)).setImageAlpha(255);
         else
             ((ImageView) findViewById(id)).setImageAlpha(80);
+    }
+
+    public void setUpDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Are you sure about exit?");
+        builder.setMessage("You lose the game if you exit.");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                addGameScore(model.getGameMode(),GameResult.LOSE,"Bot");
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        alert = builder.create();
+    }
+
+    private void addGameScore(GameMode mode, GameResult result, String opponentNickName){
+        GameScore gameScore = new GameScore(mode, result, opponentNickName);
+
+        DatabaseHandler db = new DatabaseHandler(this);
+        db.addScore(gameScore);
+
+        Intent intent = new Intent(this, StartActivity.class);
+        startActivity(intent);
     }
 }

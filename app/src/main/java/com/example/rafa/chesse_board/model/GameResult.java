@@ -26,4 +26,16 @@ public enum GameResult {
 
     @Override
     public abstract String toString();
+
+    public static GameResult builder(String result){
+        result = result.trim();
+
+        if(GameResult.WIN.toString().equalsIgnoreCase(result))
+            return GameResult.WIN;
+        else if(GameResult.LOSE.toString().equalsIgnoreCase(result))
+            return GameResult.LOSE;
+        else if(GameResult.DRAW.toString().equalsIgnoreCase(result))
+            return GameResult.DRAW;
+        return null;
+    }
 }
