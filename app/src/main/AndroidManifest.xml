@@ -14,15 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.StartActivity">
+        <activity
+            android:name=".ui.StartActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.profile.ProfileEditorActivity" />
-        <activity android:name=".ui.profile.ProfileInfoActivity"></activity>
+        <activity
+            android:name=".ui.profile.ProfileEditorActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.profile.ProfileInfoActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

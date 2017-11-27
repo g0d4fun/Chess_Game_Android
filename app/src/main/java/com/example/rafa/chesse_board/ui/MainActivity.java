@@ -23,6 +23,8 @@ import com.example.rafa.chesse_board.model.board.BoardUtils;
 import com.example.rafa.chesse_board.model.board.Move;
 import com.example.rafa.chesse_board.model.board.Tile;
 import com.example.rafa.chesse_board.model.pieces.Piece;
+import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
+import com.example.rafa.chesse_board.model.sqlite.Profile;
 import com.google.common.collect.Lists;
 
 import java.lang.reflect.Array;
@@ -41,11 +43,24 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
     protected BoardDirection direction;
 
+    private Profile profile;
+    private DatabaseHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = new DatabaseHandler(this);
+        if (db.getProfilesCount() == 0)
+            db.addProfile(new Profile("No Profile", null));
+
+        profile = db.getAllProfiles().get(0);
+
         setContentView(R.layout.activity_main);
         direction = BoardDirection.NORMAL;
+
+        TextView nicknamePlayer1 = findViewById(R.id.Player1);
+        nicknamePlayer1.setText(profile.getNickName());
 
         LinearLayout chessBoardLayout = findViewById(R.id.chess_board);
         int boardWidth = chessBoardLayout.getWidth();
@@ -70,8 +85,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         renderGame();
     }
     //chessBoardLayout
-
-
+    
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -341,7 +355,6 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         }
         return null;
     }
-
 
     public void updatePiecesCaptured() {
         int lightRooks = 2;

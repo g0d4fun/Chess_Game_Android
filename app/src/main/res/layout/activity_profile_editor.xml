@@ -75,8 +75,7 @@
             <EditText
                 android:id="@+id/nickname_editor"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rafa"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <View

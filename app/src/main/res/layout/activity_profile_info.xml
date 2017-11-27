@@ -28,12 +28,13 @@
             android:background="@drawable/chess_sporting" />
 
         <TextView
+            android:id="@+id/profile_info_nickname"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:fontFamily="@font/julius_sans_one"
             android:gravity="center_vertical"
-            android:text="Rafa"
+            android:text="@string/no_profile_choosen"
             android:textSize="24sp" />
 
         <ImageButton

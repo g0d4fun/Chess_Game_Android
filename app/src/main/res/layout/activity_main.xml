@@ -599,7 +599,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/julius_sans_one"
                 android:gravity="right"
-                android:text="Rafa"
+                android:text="@string/no_profile_choosen"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

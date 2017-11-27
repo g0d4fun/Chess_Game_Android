@@ -11,4 +11,9 @@
     <string name="no_profile_choosen">No Profile</string>
     <string name="item_flip_board">Flip Board</string>
     <string name="item_give_up">Give Up</string>
+
+    <!-- GameResult -->
+    <string name="win">Win</string>
+    <string name="lose">Lose</string>
+    <string name="draw">Draw</string>
 </resources>

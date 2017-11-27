@@ -15,11 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
+import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
+import com.example.rafa.chesse_board.model.sqlite.Profile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProfileInfoActivity extends AppCompatActivity {
+
+    private Profile profile;
+    private DatabaseHandler db;
 
     ArrayList<HashMap<String, Object>> profileData;
 
@@ -34,11 +39,21 @@ public class ProfileInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Rafa's Info");
+
+        db = new DatabaseHandler(this);
+        if (db.getProfilesCount() == 0)
+            db.addProfile(new Profile("No Profile", null));
+
+        profile = db.getAllProfiles().get(0);
+        setTitle(profile.getNickName() + "'s Profile");
+
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setElevation(0);
         actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_profile_info);
+
+        TextView nickname = findViewById(R.id.profile_info_nickname);
+        nickname.setText(profile.getNickName());
 
         profileData = new ArrayList<>();
         addProfile("Bot", null);

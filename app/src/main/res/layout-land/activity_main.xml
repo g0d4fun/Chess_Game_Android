@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Rafa"
+            android:text="@string/no_profile_choosen"
             android:textSize="20sp"
             android:fontFamily="@font/julius_sans_one"/>
 
