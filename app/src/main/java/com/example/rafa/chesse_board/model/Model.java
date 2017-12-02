@@ -31,6 +31,7 @@ public class Model {
     protected ModelChess modelChess;
     protected GameMode gameMode;
     protected Alliance myAllianceOnline;
+    protected Communication communication;
 
     public Model() {
         modelChess = new ModelChess();
