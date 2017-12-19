@@ -1,6 +1,7 @@
 package com.example.rafa.chesse_board.ui;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.widget.ImageButton;
 
 import com.example.rafa.chesse_board.model.Model;
@@ -13,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * Created by henri on 11/19/2017.
@@ -29,6 +31,7 @@ public class ApplicationState extends Application {
         public Tile sourceTile, destinationTile;
         public Piece pieceToBeMoved;
     }
+
     public ApplicationState(){
         obj = this;
         obj.wrapper = new Wrapper();
@@ -82,6 +85,7 @@ public class ApplicationState extends Application {
         if(obj.wrapper == null)
             obj.wrapper = new Wrapper();
     }
+
     public static ImageButton[] getTiles() {
         return obj.wrapper.tiles;
     }
@@ -101,6 +105,7 @@ public class ApplicationState extends Application {
     public static Piece getPieceToBeMoved() {
         return obj.wrapper.pieceToBeMoved;
     }
+
 }
 
 

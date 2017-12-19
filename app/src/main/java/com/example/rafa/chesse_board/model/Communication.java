@@ -17,7 +17,6 @@ import java.util.Enumeration;
 /**
  * Created by henri on 12/2/2017.
  */
-
 class Communication {
 
     boolean isClient;

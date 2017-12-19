@@ -8,5 +8,5 @@ import android.graphics.Color;
 
 public interface UIConstants {
 
-
+    public static final String IMAGE_FILE_PATH = "/profilePicture.png";
 }
