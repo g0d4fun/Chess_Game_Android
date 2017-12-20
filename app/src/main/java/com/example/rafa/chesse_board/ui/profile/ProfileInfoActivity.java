@@ -20,6 +20,7 @@ import com.example.rafa.chesse_board.model.GameResult;
 import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
 import com.example.rafa.chesse_board.model.sqlite.GameScore;
 import com.example.rafa.chesse_board.model.sqlite.Profile;
+import com.example.rafa.chesse_board.ui.UIUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,9 +50,9 @@ public class ProfileInfoActivity extends AppCompatActivity {
         if (db.getProfilesCount() == 0)
             db.addProfile(new Profile("No Profile", null));
 
-        profile = db.getAllProfiles().get(0);
-        setTitle(profile.getNickName() + "'s Profile");
+        profile = db.getPlayerProfile();
 
+        setTitle(profile.getNickName() + "'s Profile");
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setElevation(0);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -135,5 +136,29 @@ public class ProfileInfoActivity extends AppCompatActivity {
             notifyDataSetChanged();
             return layout;
         }
+    }
+
+    public void updateView(){
+        profile = db.getPlayerProfile();
+        String imageFilePath = profile.getImagePath();
+        ImageView profilePicture = findViewById(R.id.info_profile_picture);
+        try {
+            UIUtils.setPic(profilePicture, imageFilePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();
+            profilePicture.setImageResource(R.drawable.chess_sporting);
+        }
+
+        TextView profile_info_nickname = findViewById(R.id.profile_info_nickname);
+        profile_info_nickname.setText(profile.getNickName());
+        setTitle(profile.getNickName() + "'s Profile");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateView();
     }
 }

@@ -26,7 +26,7 @@ import static java.lang.System.out;
 public abstract class UIUtils {
 
     public static void setPic(ImageView mImageView, String mCurrentPhotoPath) {
-        // Get the dimensions of the View
+        /*// Get the dimensions of the View
         int targetW = mImageView.getWidth();
         int targetH = mImageView.getHeight();
 
@@ -45,8 +45,8 @@ public abstract class UIUtils {
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        */
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
         mImageView.setImageBitmap(bitmap); //em alternativa retornar apenas o Bitmap
     }
 

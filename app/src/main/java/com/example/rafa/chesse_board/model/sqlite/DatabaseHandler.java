@@ -197,6 +197,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return profiles;
     }
 
+    public Profile getPlayerProfile(){
+        if(getProfilesCount() == 0)
+            return null;
+        return getAllProfiles().get(0);
+    }
+
     public int getProfilesCount() {
         String countQuery = "SELECT  * FROM " + TABLE_PROFILES;
         SQLiteDatabase db = this.getReadableDatabase();

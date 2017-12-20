@@ -59,7 +59,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
     }
 
     public void updateView() {
-        profile = db.getAllProfiles().get(0);
+        profile = db.getPlayerProfile();
         imageFilePath = profile.getImagePath();
 
         try {
@@ -119,5 +119,12 @@ public class ProfileEditorActivity extends AppCompatActivity {
 
             Toast.makeText(this, imageFilePath, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateView();
     }
 }

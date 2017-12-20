@@ -83,14 +83,17 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 model.startNewGame(GameMode.SINGLE_PLAYER);
             } else if (temp.equalsIgnoreCase(GameMode.MULTIPLAYER.toString())) {
                 model.startNewGame(GameMode.MULTIPLAYER);
-            } else if (temp.equalsIgnoreCase(GameMode.ONLINE.toString()))
+            } else if (temp.equalsIgnoreCase(GameMode.ONLINE.toString())) {
                 model.startNewGame(GameMode.ONLINE);
+            }
+            setTitle(model.getGameMode().toString() + " Game");
             Toast.makeText(this, "Mode: " + model.getGameMode(), Toast.LENGTH_SHORT).show();
         }
         tiles = setUpButtons();
         setUpListeners();
         setUpDialog();
         renderGame();
+        updatePlayerProfile();
     }
     //chessBoardLayout
 
@@ -444,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             ((ImageView) findViewById(id)).setImageAlpha(80);
     }
 
-    public void setUpDialog(){
+    public void setUpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Are you sure about exit?");
@@ -454,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                addGameScore(model.getGameMode(),GameResult.LOSE,"Bot");
+                addGameScore(model.getGameMode(), GameResult.LOSE, "Bot");
             }
         });
 
@@ -469,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         alert = builder.create();
     }
 
-    private void addGameScore(GameMode mode, GameResult result, String opponentNickName){
+    private void addGameScore(GameMode mode, GameResult result, String opponentNickName) {
         GameScore gameScore = new GameScore(mode, result, opponentNickName);
 
         DatabaseHandler db = new DatabaseHandler(this);
@@ -477,5 +480,25 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
         Intent intent = new Intent(this, StartActivity.class);
         startActivity(intent);
+    }
+
+    private void updatePlayerProfile() {
+        profile = db.getPlayerProfile();
+        String imageFilePath = profile.getImagePath();
+        ImageView profilePicture = findViewById(R.id.player_picture);
+        try {
+            UIUtils.setPic(profilePicture, imageFilePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();
+            profilePicture.setImageResource(R.drawable.chess_sporting);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updatePlayerProfile();
     }
 }

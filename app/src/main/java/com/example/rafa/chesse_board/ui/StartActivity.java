@@ -28,6 +28,7 @@ import java.util.Enumeration;
 public class StartActivity extends AppCompatActivity {
 
     private Profile profile;
+    private TextView nickname;
     private DatabaseHandler db;
 
     @Override
@@ -39,13 +40,13 @@ public class StartActivity extends AppCompatActivity {
         if (db.getProfilesCount() == 0)
             db.addProfile(new Profile("No Profile", null));
 
-        profile = db.getAllProfiles().get(0);
+        profile = db.getPlayerProfile();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         setContentView(R.layout.activity_start);
 
-        TextView nickname = findViewById(R.id.start_profile_nickname);
+        nickname = findViewById(R.id.start_profile_nickname);
         nickname.setText(profile.getNickName());
     }
 
@@ -117,5 +118,21 @@ public class StartActivity extends AppCompatActivity {
 //                procMsg.post()
 //            }
 //        })
+    }
+
+    public void updateView() {
+        profile = db.getPlayerProfile();
+        if (profile == null || nickname != null) {
+            nickname.setText("");
+            return;
+        }
+        nickname.setText(profile.getNickName());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateView();
     }
 }
