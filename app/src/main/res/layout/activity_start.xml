@@ -7,7 +7,7 @@
     android:background="@color/startBackground"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.example.rafa.chesse_board.StartActivity">
+    tools:context="com.example.rafa.chesse_board.ui.StartActivity">
 
     <TextView
         android:layout_width="match_parent"

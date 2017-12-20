@@ -21,6 +21,8 @@ import com.example.rafa.chesse_board.R;
 import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
 import com.example.rafa.chesse_board.model.sqlite.Profile;
 import com.example.rafa.chesse_board.ui.ApplicationState;
+import com.example.rafa.chesse_board.ui.CameraActivity;
+import com.example.rafa.chesse_board.ui.StartActivity;
 import com.example.rafa.chesse_board.ui.UIConstants;
 import com.example.rafa.chesse_board.ui.UIUtils;
 
@@ -64,6 +66,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
             UIUtils.setPic(profilePicture, imageFilePath);
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();
             profilePicture.setImageResource(R.drawable.chess_sporting);
         }
 
@@ -82,25 +85,8 @@ public class ProfileEditorActivity extends AppCompatActivity {
     }
 
     protected void onClickTakePicture(View v) {
-        Toast.makeText(this, "Take Picture", Toast.LENGTH_SHORT).show();
-        if (Build.VERSION.SDK_INT >= 21) {
-            try {
-                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                m.invoke(null);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        imageFilePath = getExternalFilesDir(null) + "/profilePicture.png";
-        Uri fileUri;
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        fileUri = Uri.fromFile(new File(imageFilePath));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        startActivityForResult(intent, 20);
+        Intent takePhotoIntent = new Intent(this, CameraActivity.class);
+        startActivity(takePhotoIntent);
     }
 
     protected void onClickSubmit(View v) {

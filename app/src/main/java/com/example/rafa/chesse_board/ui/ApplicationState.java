@@ -20,12 +20,12 @@ import java.io.Serializable;
  * Created by henri on 11/19/2017.
  */
 
-public class ApplicationState extends Application {
+public class ApplicationState extends Application implements Serializable {
 
     protected static ApplicationState obj;
     protected Wrapper wrapper;
 
-    private static class Wrapper{
+    private static class Wrapper implements Serializable{
         public ImageButton[] tiles;
         public Model model;
         public Tile sourceTile, destinationTile;

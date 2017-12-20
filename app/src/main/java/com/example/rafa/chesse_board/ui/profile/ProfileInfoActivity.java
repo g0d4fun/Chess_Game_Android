@@ -88,7 +88,6 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
     public void launchEditorActivity(View v) {
         Intent intent = new Intent(this, ProfileEditorActivity.class);
-        toast("Profile Editor");
         startActivity(intent);
     }
 
