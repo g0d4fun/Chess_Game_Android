@@ -56,12 +56,13 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
 
         db = new DatabaseHandler(this);
         if (db.getProfilesCount() == 0)
             db.addProfile(new Profile("No Profile", null));
 
-        profile = db.getAllProfiles().get(0);
+        profile = db.getPlayerProfile();
 
         setContentView(R.layout.activity_main);
         direction = BoardDirection.NORMAL;

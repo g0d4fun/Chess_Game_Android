@@ -226,6 +226,7 @@ public class CameraActivity extends AppCompatActivity {
                             output.close();
                         }
                     }
+                    finish();
                 }
             };
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);

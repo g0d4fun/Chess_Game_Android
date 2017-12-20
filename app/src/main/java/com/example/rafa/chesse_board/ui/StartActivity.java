@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,8 @@ public class StartActivity extends AppCompatActivity {
 
         nickname = findViewById(R.id.start_profile_nickname);
         nickname.setText(profile.getNickName());
+
+        updateView();
     }
 
     protected void onClickProfile(View v) {
@@ -65,6 +68,27 @@ public class StartActivity extends AppCompatActivity {
     protected void onClickMultiplayer(View v) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("game_mode", GameMode.MULTIPLAYER.toString());
+
+        final EditText txtUrl = new EditText(this);
+
+// Set the default text to a link of the Queen
+        txtUrl.setHint("http://www.librarising.com/astrology/celebs/images2/QR/queenelizabethii.jpg");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Opponent Name")
+                .setMessage("Set oponnent Name")
+                .setView(txtUrl)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String url = txtUrl.getText().toString();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                })
+                .show();
+
         startActivity(intent);
     }
 
@@ -122,7 +146,7 @@ public class StartActivity extends AppCompatActivity {
 
     public void updateView() {
         profile = db.getPlayerProfile();
-        if (profile == null || nickname != null) {
+        if (profile == null || nickname == null) {
             nickname.setText("");
             return;
         }
