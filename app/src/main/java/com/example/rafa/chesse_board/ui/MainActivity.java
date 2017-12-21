@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,9 +34,12 @@ import com.example.rafa.chesse_board.model.sqlite.Profile;
 import com.google.common.collect.Lists;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.rafa.chesse_board.model.board.BoardUtils.NUM_TILES;
 
@@ -74,30 +78,60 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         int boardWidth = chessBoardLayout.getWidth();
         chessBoardLayout.setMinimumHeight(boardWidth);
 
-        if (savedInstanceState != null && savedInstanceState.getBoolean("Save"))
+        if (savedInstanceState != null && savedInstanceState.getBoolean("Save")) {
             savedInstanceState(savedInstanceState);
-        else {
+
+        } else {
             // New Game
             model = new Model();
             String temp = getIntent().getStringExtra("game_mode");
             if (temp.equalsIgnoreCase(GameMode.SINGLE_PLAYER.toString())) {
                 model.startNewGame(GameMode.SINGLE_PLAYER);
             } else if (temp.equalsIgnoreCase(GameMode.MULTIPLAYER.toString())) {
-                model.startNewGame(GameMode.MULTIPLAYER);
+                String opponentName = getIntent().getStringExtra("opponent_name");
+                int timer = getIntent().getIntExtra("timer", 30);
+                model.setMillisecondsToFinish(timer * 60000);
+                model.setMillisecondsToFinishOpponent(timer * 60000);
+                model.startNewGame(GameMode.MULTIPLAYER, opponentName);
+                setUpCountDown(timer * model.getMillisecondsToFinish());
+
             } else if (temp.equalsIgnoreCase(GameMode.ONLINE.toString())) {
                 model.startNewGame(GameMode.ONLINE);
             }
             setTitle(model.getGameMode().toString() + " Game");
             Toast.makeText(this, "Mode: " + model.getGameMode(), Toast.LENGTH_SHORT).show();
+
+
         }
+        if (model.getOpponentName() != null)
+            ((TextView) findViewById(R.id.Player2)).setText(model.getOpponentName());
+
         tiles = setUpButtons();
         setUpListeners();
         setUpDialog();
         renderGame();
         updatePlayerProfile();
     }
-    //chessBoardLayout
 
+    private CountDownTimer setUpCountDown(int milliseconds) {
+        return new CountDownTimer(milliseconds, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                long minutesLeft = (millisUntilFinished / 1000)  / 60;
+                long secondsLeft = (millisUntilFinished / 1000) % 60;
+                model.setMillisecondsToFinish((int)millisUntilFinished);
+                ((TextView) (findViewById(R.id.countdown))).setText(minutesLeft + ":" + secondsLeft);
+            }
+
+            public void onFinish() {
+                //mTextField.setText("done!");
+                ((TextView) (findViewById(R.id.countdown))).setText("Time's Up");
+            }
+        }.start();
+    }
+
+    // chessBoardLayout-----------------------------------------------------------------------------
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -458,7 +492,10 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                addGameScore(model.getGameMode(), GameResult.LOSE, "Bot");
+                String opponentName = model.getOpponentName();
+                if (opponentName == null)
+                    opponentName = "Bot";
+                addGameScore(model.getGameMode(), GameResult.LOSE, opponentName);
             }
         });
 

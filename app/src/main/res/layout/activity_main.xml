@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context="com.example.rafa.chesse_board.ui.MainActivity">
 
+    <TextView
+        android:id="@+id/countdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/julius_sans_one"
+        android:text="00:00"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/DARK_TILE_COLOR_HEX"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

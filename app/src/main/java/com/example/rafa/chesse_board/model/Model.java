@@ -31,13 +31,23 @@ public class Model {
     protected ModelChess modelChess;
     protected GameMode gameMode;
     protected Alliance myAllianceOnline;
+    protected String opponentName;
+    protected int millisecondsToFinish;
+    protected int millisecondsToFinishOpponent;
     protected Communication communication;
 
     public Model() {
         modelChess = new ModelChess();
+        this.millisecondsToFinish = 0;
+        this.millisecondsToFinishOpponent = 0;
     }
 
-    // Interation Methods
+    // Iteration Methods----------------------------------------------------------------------------
+    public Board startNewGame(GameMode gameMode, String opponentName) {
+        this.opponentName = opponentName;
+        return startNewGame(gameMode);
+    }
+
     public Board startNewGame(GameMode gameMode) {
         switch (gameMode) {
             case SINGLE_PLAYER:
@@ -153,5 +163,25 @@ public class Model {
 
     public GameMode getGameMode() {
         return gameMode;
+    }
+
+    public String getOpponentName() {
+        return opponentName;
+    }
+
+    public int getMillisecondsToFinish() {
+        return millisecondsToFinish;
+    }
+
+    public void setMillisecondsToFinish(int millisecondsToFinish) {
+        this.millisecondsToFinish = millisecondsToFinish;
+    }
+
+    public int getMillisecondsToFinishOpponent() {
+        return millisecondsToFinishOpponent;
+    }
+
+    public void setMillisecondsToFinishOpponent(int millisecondsToFinishOpponent) {
+        this.millisecondsToFinishOpponent = millisecondsToFinishOpponent;
     }
 }

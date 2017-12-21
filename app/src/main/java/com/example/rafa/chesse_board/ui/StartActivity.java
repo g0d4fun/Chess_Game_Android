@@ -31,6 +31,7 @@ public class StartActivity extends AppCompatActivity {
     private Profile profile;
     private TextView nickname;
     private DatabaseHandler db;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,30 +67,66 @@ public class StartActivity extends AppCompatActivity {
     }
 
     protected void onClickMultiplayer(View v) {
-        Intent intent = new Intent(this, MainActivity.class);
+        intent = new Intent(this, MainActivity.class);
         intent.putExtra("game_mode", GameMode.MULTIPLAYER.toString());
 
+        getOpponentNameIntentDialog();
+    }
+
+    protected void getOpponentNameIntentDialog() {
         final EditText txtUrl = new EditText(this);
-
-// Set the default text to a link of the Queen
-        txtUrl.setHint("http://www.librarising.com/astrology/celebs/images2/QR/queenelizabethii.jpg");
-
+        txtUrl.setHint("Opponent Name");
         new AlertDialog.Builder(this)
                 .setTitle("Opponent Name")
-                .setMessage("Set oponnent Name")
                 .setView(txtUrl)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String url = txtUrl.getText().toString();
+                        intent.putExtra("opponent_name", url);
+                        hasCountDownDialog();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        intent = null;
                     }
                 })
                 .show();
+    }
 
-        startActivity(intent);
+    protected void hasCountDownDialog() {
+        final EditText txtUrl = new EditText(this);
+        txtUrl.setHint("10-120 minutes");
+        new AlertDialog.Builder(this)
+                .setTitle("Timer")
+                .setView(txtUrl)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String url = txtUrl.getText().toString();
+                        try {
+                            int timer = Integer.parseInt(url);
+                            if(timer < 10 || timer > 120) {
+                                intent = null;
+                                Toast.makeText(StartActivity.this,
+                                        "Time Value Out of Range.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            intent.putExtra("timer",timer);
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            intent = null;
+                            Toast.makeText(StartActivity.this,
+                                    "Time Value not Valid.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        intent = null;
+                    }
+                })
+                .show();
     }
 
     protected void onClickOnline(View v) {
@@ -98,11 +135,11 @@ public class StartActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void onClickCreateGame(View v){
+    protected void onClickCreateGame(View v) {
 
     }
 
-    protected void onClickJoinGame(View v){
+    protected void onClickJoinGame(View v) {
 
     }
 
