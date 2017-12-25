@@ -82,6 +82,10 @@ public class StartActivity extends AppCompatActivity {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String url = txtUrl.getText().toString();
+                        if(url.length() <= 2){
+                            getOpponentNameIntentDialog();
+                            return;
+                        }
                         intent.putExtra("opponent_name", url);
                         hasCountDownDialog();
                     }

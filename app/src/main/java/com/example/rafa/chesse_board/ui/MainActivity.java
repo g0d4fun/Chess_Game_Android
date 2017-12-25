@@ -1,10 +1,14 @@
 package com.example.rafa.chesse_board.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,17 +25,15 @@ import android.widget.Toast;
 import com.example.rafa.chesse_board.R;
 import com.example.rafa.chesse_board.model.Alliance;
 import com.example.rafa.chesse_board.model.GameMode;
+import com.example.rafa.chesse_board.model.GameOnlineMode;
 import com.example.rafa.chesse_board.model.GameResult;
 import com.example.rafa.chesse_board.model.Model;
-import com.example.rafa.chesse_board.model.board.Board;
-import com.example.rafa.chesse_board.model.board.BoardUtils;
 import com.example.rafa.chesse_board.model.board.Move;
 import com.example.rafa.chesse_board.model.board.Tile;
 import com.example.rafa.chesse_board.model.pieces.Piece;
 import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
 import com.example.rafa.chesse_board.model.sqlite.GameScore;
 import com.example.rafa.chesse_board.model.sqlite.Profile;
-import com.google.common.collect.Lists;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             model = new Model();
             String temp = getIntent().getStringExtra("game_mode");
             if (temp.equalsIgnoreCase(GameMode.SINGLE_PLAYER.toString())) {
+                ((TextView) findViewById(R.id.countdown)).setVisibility(View.INVISIBLE);
                 model.startNewGame(GameMode.SINGLE_PLAYER);
             } else if (temp.equalsIgnoreCase(GameMode.MULTIPLAYER.toString())) {
                 String opponentName = getIntent().getStringExtra("opponent_name");
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 model.setMillisecondsToFinish(timer * 60000);
                 model.setMillisecondsToFinishOpponent(timer * 60000);
                 model.startNewGame(GameMode.MULTIPLAYER, opponentName);
-                setUpCountDown(timer * model.getMillisecondsToFinish());
+                setUpCountDown(model.getMillisecondsToFinish());
 
             } else if (temp.equalsIgnoreCase(GameMode.ONLINE.toString())) {
                 model.startNewGame(GameMode.ONLINE);
@@ -113,22 +116,82 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         updatePlayerProfile();
     }
 
-    private CountDownTimer setUpCountDown(int milliseconds) {
-        return new CountDownTimer(milliseconds, 1000) {
+    /**
+     * Count Down Timer used in Multiplayer and Online Game, which only
+     * need to be called once per game.
+     * When player is changed, automatically changes the count down time.
+     * After one of the count down time reaches the end, the opponent
+     * (not current player) wins the game.
+     * @param milliseconds
+     */
+    private void setUpCountDown(final long milliseconds) {
+
+        new CountDownTimer(milliseconds, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-                long minutesLeft = (millisUntilFinished / 1000)  / 60;
+                long minutesLeft = (millisUntilFinished / 1000) / 60;
                 long secondsLeft = (millisUntilFinished / 1000) % 60;
-                model.setMillisecondsToFinish((int)millisUntilFinished);
-                ((TextView) (findViewById(R.id.countdown))).setText(minutesLeft + ":" + secondsLeft);
+                if (model.isWhiteCountDownTimer()) {
+                    if (model.getCurrentPlayer().isWhite()) {
+                        ((TextView) (findViewById(R.id.countdown))).setTextColor(getResources().getColor(R.color.LIGHT_TILE_COLOR_HEX));
+                        ((TextView) (findViewById(R.id.countdown))).setText(minutesLeft + ":" + secondsLeft);
+                        model.setMillisecondsToFinish((int) millisUntilFinished);
+                    }else{
+                        setUpCountDown(model.getMillisecondsToFinishOpponent());
+                        model.setWhiteCountDownTimer(false);
+                        cancel();
+                    }
+                }else{
+                    if (model.getCurrentPlayer().isBlack()) {
+                        ((TextView) (findViewById(R.id.countdown))).setTextColor(getResources().getColor(R.color.DARK_TILE_COLOR_HEX));
+                        ((TextView) (findViewById(R.id.countdown))).setText(minutesLeft + ":" + secondsLeft);
+                        model.setMillisecondsToFinishOpponent((int) millisUntilFinished);
+                    }else{
+
+                        setUpCountDown(model.getMillisecondsToFinish());
+                        model.setWhiteCountDownTimer(true);
+                        cancel();
+                    }
+                }
             }
 
             public void onFinish() {
-                //mTextField.setText("done!");
                 ((TextView) (findViewById(R.id.countdown))).setText("Time's Up");
+                String opponentName = model.getOpponentName();
+                if (opponentName == null)
+                    opponentName = "Bot";
+                // Player 1 - Profile owner
+                if (model.getCurrentPlayer().isWhite())
+                    alertDialogEndGame("Your time is over, you Lose!", opponentName, GameResult.LOSE);
+                    // Player 2
+                else
+                    alertDialogEndGame("Your opponent time is over, you Won!", opponentName, GameResult.WIN);
             }
         }.start();
+    }
+
+    /**
+     * This method display a Alert Dialog on End Game, before
+     * return to Start Menu. Automatically add score to database and
+     * ends activity
+     * @param message How game ended
+     * @param opponentName Opponent Name (to save on mysql local database)
+     * @param result Game Result (win, lose or draw to save on mysql local database)
+     */
+    protected void alertDialogEndGame(final String message, final String opponentName,
+                                      final GameResult result) {
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Game Over");
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                addGameScore(model.getGameMode(), result, opponentName);
+            }
+        });
+
+        alertDialog.show();
     }
 
     // chessBoardLayout-----------------------------------------------------------------------------
@@ -174,6 +237,10 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             destinationTile = state.getDestinationTile();
             pieceToBeMoved = state.getPieceToBeMoved();
             Toast.makeText(state, "Get Saved Instance", Toast.LENGTH_SHORT).show();
+            if(model.getCurrentPlayer().isWhite())
+                setUpCountDown(model.getMillisecondsToFinish());
+            else
+                setUpCountDown(model.getMillisecondsToFinishOpponent());
         } else {
             //From intent
         }
@@ -309,21 +376,24 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         }
     }
 
+    /**
+     * Render game
+     */
     public void renderGame() {
         // Draw Tiles
         for (int i = 0; i < NUM_TILES; i++) {
             int column = i / 8;
             int row = i - column * 8;
 
-            if ((row % 2) == (column % 2))// Light Color
+            if ((row % 2) == (column % 2)) // Light Color
                 tiles[i].setBackgroundColor(getResources().getColor(R.color.LIGHT_TILE_COLOR_HEX));
-            else // White Color
+            else // Dark Color
                 tiles[i].setBackgroundColor(getResources().getColor(R.color.DARK_TILE_COLOR_HEX));
 
             if (sourceTile == direction.traverse(model.getBoard().getGameBoard()).get(i))
-                if ((row % 2) == (column % 2))
+                if ((row % 2) == (column % 2)) // Light Color
                     tiles[i].setBackgroundColor(getResources().getColor(R.color.LIGHT_TILE_COLOR_HEX_ON_CLICK));
-                else
+                else  // Dark Color
                     tiles[i].setBackgroundColor(getResources().getColor(R.color.DARK_TILE_COLOR_HEX_ON_CLICK));
 
             Tile tile = direction.traverse(model.getBoard().getGameBoard()).get(i);
@@ -520,6 +590,9 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         startActivity(intent);
     }
 
+    /**
+     * Update player profile picture
+     */
     private void updatePlayerProfile() {
         profile = db.getPlayerProfile();
         String imageFilePath = profile.getImagePath();
@@ -536,7 +609,39 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     @Override
     protected void onResume() {
         super.onResume();
+    }
 
-        updatePlayerProfile();
+    //Communication -------------------------------------------------------------------------
+
+    protected void setUpOnlineGame(Intent intent){
+        String mode = "";
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            Toast.makeText(this,"Network Connection Error.",
+                    Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+        if (intent != null)
+            mode = intent.getStringExtra("online_mode");
+        if(!mode.equalsIgnoreCase(GameOnlineMode.CLIENT.toString()) &&
+                !mode.equalsIgnoreCase(GameOnlineMode.SERVER.toString())){
+            Toast.makeText(this,"Game Mode should be better.",
+                    Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+        GameOnlineMode gameOnlineMode = GameOnlineMode.valueOf(mode);
+
+        model.setUpCommunication(gameOnlineMode,this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        model.onPauseCoomunication();
     }
 }
