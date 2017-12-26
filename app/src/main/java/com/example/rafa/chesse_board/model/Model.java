@@ -43,7 +43,7 @@ public class Model {
      * @return DONE, ILLEGAL_MOVE or LEAVES_PLAYER_IN_CHECK
      */
     public MoveStatus makeMove(Tile sourceTile, Tile destinationTile) {
-        return makeMove(sourceTile,destinationTile);
+        return model.makeMove(sourceTile,destinationTile);
     }
 
     /**
@@ -52,7 +52,7 @@ public class Model {
      * @return DONE, ILLEGAL_MOVE or LEAVES_PLAYER_IN_CHECK
      */
     public MoveStatus makeMove(int sourceTileId, int destinationTileId) {
-        return makeMove(sourceTileId, destinationTileId);
+        return model.makeMove(sourceTileId, destinationTileId);
     }
 
     public Collection<Move> pieceLegalMoves(Piece pieceToMove) {
@@ -119,7 +119,7 @@ public class Model {
     // Communication for online game
 
     public void setUpCommunication(GameOnlineMode mode, MainActivity mainActivity){
-        communication = new OnlineCommunication(mode,mainActivity);
+        communication = new OnlineCommunication(mode,mainActivity, this);
     }
 
     public OnlineCommunication getComm() {
@@ -128,7 +128,17 @@ public class Model {
         return communication;
     }
 
-    public void onPauseCoomunication(){
+    public void onPauseCommunication(){
         communication.onPause();
+    }
+
+    public void onResumeCommunication(){
+        communication.onResume();
+    }
+
+    public boolean commSettedUp(){
+        if(communication == null)
+            return false;
+        return true;
     }
 }

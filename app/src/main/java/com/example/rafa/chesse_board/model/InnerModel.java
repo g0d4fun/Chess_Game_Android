@@ -87,13 +87,13 @@ public class InnerModel {
             case MULTIPLAYER:
                 return modelChess.makeMove(sourceTile, destinationTile);
             case ONLINE:
-                if(myAllianceOnline.equals(getCurrentPlayerAlliance())){
+                //if(myAllianceOnline.equals(getCurrentPlayerAlliance())){
                     return modelChess.makeMove(sourceTile,destinationTile);
-                }
-                else{
+                //}
+                //else{
                     //TODO: Opponent Turn
-                }
-                break;
+                //}
+                //break;
         }
         return MoveStatus.ILLEGAL_MOVE;
     }

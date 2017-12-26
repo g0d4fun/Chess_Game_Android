@@ -114,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         setUpDialog();
         renderGame();
         updatePlayerProfile();
+
+        if (model.getGameMode().equals(GameMode.ONLINE))
+            setUpOnlineGame(getIntent());
     }
 
     /**
@@ -122,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
      * When player is changed, automatically changes the count down time.
      * After one of the count down time reaches the end, the opponent
      * (not current player) wins the game.
+     *
      * @param milliseconds
      */
     private void setUpCountDown(final long milliseconds) {
@@ -136,17 +140,17 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                         ((TextView) (findViewById(R.id.countdown))).setTextColor(getResources().getColor(R.color.LIGHT_TILE_COLOR_HEX));
                         ((TextView) (findViewById(R.id.countdown))).setText(minutesLeft + ":" + secondsLeft);
                         model.setMillisecondsToFinish((int) millisUntilFinished);
-                    }else{
+                    } else {
                         setUpCountDown(model.getMillisecondsToFinishOpponent());
                         model.setWhiteCountDownTimer(false);
                         cancel();
                     }
-                }else{
+                } else {
                     if (model.getCurrentPlayer().isBlack()) {
                         ((TextView) (findViewById(R.id.countdown))).setTextColor(getResources().getColor(R.color.DARK_TILE_COLOR_HEX));
                         ((TextView) (findViewById(R.id.countdown))).setText(minutesLeft + ":" + secondsLeft);
                         model.setMillisecondsToFinishOpponent((int) millisUntilFinished);
-                    }else{
+                    } else {
 
                         setUpCountDown(model.getMillisecondsToFinish());
                         model.setWhiteCountDownTimer(true);
@@ -174,9 +178,10 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
      * This method display a Alert Dialog on End Game, before
      * return to Start Menu. Automatically add score to database and
      * ends activity
-     * @param message How game ended
+     *
+     * @param message      How game ended
      * @param opponentName Opponent Name (to save on mysql local database)
-     * @param result Game Result (win, lose or draw to save on mysql local database)
+     * @param result       Game Result (win, lose or draw to save on mysql local database)
      */
     protected void alertDialogEndGame(final String message, final String opponentName,
                                       final GameResult result) {
@@ -237,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             destinationTile = state.getDestinationTile();
             pieceToBeMoved = state.getPieceToBeMoved();
             Toast.makeText(state, "Get Saved Instance", Toast.LENGTH_SHORT).show();
-            if(model.getCurrentPlayer().isWhite())
+            if (model.getCurrentPlayer().isWhite())
                 setUpCountDown(model.getMillisecondsToFinish());
             else
                 setUpCountDown(model.getMillisecondsToFinishOpponent());
@@ -363,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                         // secondClick
                         destinationTile = model.getTile(tileId);
                         Move.MoveStatus moveStatus = model.makeMove(sourceTile, destinationTile);
+
                         if (!moveStatus.isDone())
                             Toast.makeText(getApplicationContext(), moveStatus.toString(), Toast.LENGTH_SHORT).show();
 
@@ -609,17 +615,28 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     @Override
     protected void onResume() {
         super.onResume();
+        if (model.commSettedUp()) {
+            model.onResumeCommunication();
+        }
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (model.commSettedUp()) {
+            model.onPauseCommunication();
+        }
+    }
     //Communication -------------------------------------------------------------------------
 
-    protected void setUpOnlineGame(Intent intent){
+    protected void setUpOnlineGame(Intent intent) {
         String mode = "";
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo == null || !networkInfo.isConnected()) {
-            Toast.makeText(this,"Network Connection Error.",
+            Toast.makeText(this, "Network Connection Error.",
                     Toast.LENGTH_LONG).show();
             finish();
             return;
@@ -627,21 +644,21 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
         if (intent != null)
             mode = intent.getStringExtra("online_mode");
-        if(!mode.equalsIgnoreCase(GameOnlineMode.CLIENT.toString()) &&
-                !mode.equalsIgnoreCase(GameOnlineMode.SERVER.toString())){
-            Toast.makeText(this,"Game Mode should be better.",
+        if (mode == null) {
+            Toast.makeText(this, "Game Mode is empty.",
+                    Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+        if (!mode.equalsIgnoreCase(GameOnlineMode.CLIENT.toString()) &&
+                !mode.equalsIgnoreCase(GameOnlineMode.SERVER.toString())) {
+            Toast.makeText(this, "Game Mode is wrong.",
                     Toast.LENGTH_LONG).show();
             finish();
             return;
         }
         GameOnlineMode gameOnlineMode = GameOnlineMode.valueOf(mode);
 
-        model.setUpCommunication(gameOnlineMode,this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        model.onPauseCoomunication();
+        model.setUpCommunication(gameOnlineMode, this);
     }
 }

@@ -39,11 +39,11 @@ class OnlineCommunication {
 
     MainActivity mainActivity;
     Context context;
+    Model model;
 
     ProgressDialog pd = null;
 
     GameOnlineMode mode;
-    boolean isConnected;
     ServerSocket serverSocket;
     Socket socketGame;
     Handler procMsg = null;
@@ -53,15 +53,15 @@ class OnlineCommunication {
 
     boolean toRead;
 
-    public OnlineCommunication(GameOnlineMode mode, MainActivity mainActivity) {
+    public OnlineCommunication(GameOnlineMode mode,
+                               MainActivity mainActivity, Model model) {
         this.mode = mode;
-        this.isConnected = false;
-        this.toRead = false;
 
         procMsg = new Handler();
 
         this.mainActivity = mainActivity;
         this.context = mainActivity.getApplicationContext();
+        this.model = model;
     }
 
     public void server() {
@@ -164,13 +164,16 @@ class OnlineCommunication {
                 output = new PrintWriter(socketGame.getOutputStream());
                 while (!Thread.currentThread().isInterrupted()) {
                     String read = input.readLine();
+                    String read2 = input.readLine();
                     final int move = Integer.parseInt(read);
+                    final int move2 = Integer.parseInt(read);
                     Log.d("RPS", "Received: " + move);
                     procMsg.post(new Runnable() {
                         @Override
                         public void run() {
                             // PLAY!!!
-                           // moveOtherPlayer(move);
+                            // moveOtherPlayer(move);
+                            model.makeMove(move,move2);
                         }
                     });
                 }
@@ -179,7 +182,7 @@ class OnlineCommunication {
                     @Override
                     public void run() {
                         mainActivity.finish();
-                        Toast.makeText(context,"Game Finished", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Game Finished", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -202,6 +205,13 @@ class OnlineCommunication {
         socketGame = null;
     }
 
+    public void onResume() {
+        if (mode.equals(GameOnlineMode.SERVER))
+            server();
+        else  // CLIENT
+            clientDlg();
+    }
+
     public static String getLocalIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
@@ -221,5 +231,24 @@ class OnlineCommunication {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean isClient() {
+        if (mode.equals(GameOnlineMode.CLIENT))
+            return true;
+        return false;
+    }
+
+    public boolean isServer() {
+        if (mode.equals(GameOnlineMode.SERVER))
+            return true;
+        return false;
+    }
+
+    public void makeMove(int sourceTile,int destinationTile){
+        output.println(sourceTile);
+        output.flush();
+        output.println(destinationTile);
+        output.flush();
     }
 }

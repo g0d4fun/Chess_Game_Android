@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
 import com.example.rafa.chesse_board.model.GameMode;
+import com.example.rafa.chesse_board.model.GameOnlineMode;
 import com.example.rafa.chesse_board.model.GameResult;
 import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
 import com.example.rafa.chesse_board.model.sqlite.Profile;
@@ -134,17 +135,21 @@ public class StartActivity extends AppCompatActivity {
     }
 
     protected void onClickOnline(View v) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("game_mode", GameMode.ONLINE.toString());
-        startActivity(intent);
+
     }
 
     protected void onClickCreateGame(View v) {
-
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("game_mode", GameMode.ONLINE.toString());
+        intent.putExtra("online_mode", GameOnlineMode.SERVER.toString());
+        startActivity(intent);
     }
 
     protected void onClickJoinGame(View v) {
-
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("game_mode", GameMode.ONLINE.toString());
+        intent.putExtra("online_mode", GameOnlineMode.CLIENT.toString());
+        startActivity(intent);
     }
 
     public void setUpCreateGameDialog() {
