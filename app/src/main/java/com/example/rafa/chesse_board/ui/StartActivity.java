@@ -41,7 +41,7 @@ public class StartActivity extends AppCompatActivity {
 
         db = new DatabaseHandler(this);
         if (db.getProfilesCount() == 0)
-            db.addProfile(new Profile("No Profile", null));
+            db.addProfile(new Profile(getString(R.string.no_profile), null));
 
         profile = db.getPlayerProfile();
 
@@ -57,7 +57,7 @@ public class StartActivity extends AppCompatActivity {
 
     protected void onClickProfile(View v) {
         Intent intent = new Intent(this, ProfileInfoActivity.class);
-        Toast.makeText(this, "Profile Edit", Toast.LENGTH_SHORT).show();
+        Log.i("chess_game", "Profile Edit");
         startActivity(intent);
     }
 
@@ -76,11 +76,11 @@ public class StartActivity extends AppCompatActivity {
 
     protected void getOpponentNameIntentDialog() {
         final EditText txtUrl = new EditText(this);
-        txtUrl.setHint("Opponent Name");
+        txtUrl.setHint(getString(R.string.dialog_hint_opponent_name));
         new AlertDialog.Builder(this)
-                .setTitle("Opponent Name")
+                .setTitle(getString(R.string.dialog_title_opponent_name))
                 .setView(txtUrl)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String url = txtUrl.getText().toString();
                         if(url.length() <= 2){
@@ -91,7 +91,7 @@ public class StartActivity extends AppCompatActivity {
                         hasCountDownDialog();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         intent = null;
                     }
@@ -101,9 +101,9 @@ public class StartActivity extends AppCompatActivity {
 
     protected void hasCountDownDialog() {
         final EditText txtUrl = new EditText(this);
-        txtUrl.setHint("10-120 minutes");
+        txtUrl.setHint("10-120 " + getString(R.string.minutes));
         new AlertDialog.Builder(this)
-                .setTitle("Timer")
+                .setTitle(getString(R.string.timer))
                 .setView(txtUrl)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -113,7 +113,7 @@ public class StartActivity extends AppCompatActivity {
                             if(timer < 10 || timer > 120) {
                                 intent = null;
                                 Toast.makeText(StartActivity.this,
-                                        "Time Value Out of Range.", Toast.LENGTH_SHORT).show();
+                                        getString(R.string.out_of_range_time), Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             intent.putExtra("timer",timer);
@@ -121,12 +121,12 @@ public class StartActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             intent = null;
                             Toast.makeText(StartActivity.this,
-                                    "Time Value not Valid.", Toast.LENGTH_SHORT).show();
+                                    getString(R.string.time_not_valid), Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         intent = null;
                     }
@@ -150,44 +150,6 @@ public class StartActivity extends AppCompatActivity {
         intent.putExtra("game_mode", GameMode.ONLINE.toString());
         intent.putExtra("online_mode", GameOnlineMode.CLIENT.toString());
         startActivity(intent);
-    }
-
-    public void setUpCreateGameDialog() {
-//        String myIp = getLocalIpAddress();
-//
-//        ProgressDialog progDlg = new ProgressDialog(this);
-//        progDlg.setTitle("Create an Online Game");
-//        progDlg.setMessage("Your opponent must choose to Join Game and write the following number.\n" + myIp);
-//        progDlg.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//            @Override
-//            public void onCancel(DialogInterface dialogInterface) {
-//                finish();
-//                if(serverSocket != null){
-//                    try {
-//                        serverSocket.close();
-//                    }catch(IOExeption e){}
-//                    serverSocket = null;
-//                }
-//            }
-//        });
-//        progDlg.show();
-//
-//        Thread serverThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try{
-//                    serverSocket = new ServerSocket(PORT);
-//                    socketGame = serverSocket.accept();
-//                    serverSocket.close();
-//                    serverSocket = null;
-//                    commThread.start();
-//                }catch(Exception e){
-//                    e.printStackTrace();
-//                    socketGame = null;
-//                }
-//                procMsg.post()
-//            }
-//        })
     }
 
     public void updateView() {

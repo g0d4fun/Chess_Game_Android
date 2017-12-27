@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/julius_sans_one"
-                android:text="Take Picture"
+                android:text="@string/btn_take_picture"
                 android:textStyle="bold"
                 android:background="@android:color/transparent"/>
         </LinearLayout>
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/julius_sans_one"
-            android:text="Submit"
+            android:text="@string/btn_submit_name"
             android:textStyle="bold"
             android:background="@android:color/transparent"/>
 

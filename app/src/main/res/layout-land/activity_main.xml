@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/julius_sans_one"
                 android:gravity="center"
-                android:text="@string/no_profile_choosen"
+                android:text="@string/no_profile"
                 android:textSize="20sp" />
 
             <LinearLayout
@@ -617,7 +617,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/julius_sans_one"
                 android:gravity="center"
-                android:text="Player 2"
+                android:text="@string/tv_player_2"
                 android:textSize="20sp" />
 
             <LinearLayout

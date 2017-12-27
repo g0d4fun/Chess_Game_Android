@@ -15,7 +15,7 @@
         android:layout_marginBottom="64dp"
         android:fontFamily="@font/julius_sans_one"
         android:gravity="center"
-        android:text="Chess Game"
+        android:text="@string/chess_game_title"
         android:textColor="@color/DARK_TILE_COLOR_HEX"
         android:textSize="40sp"
         android:textStyle="bold" />
@@ -57,7 +57,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1.6"
                 android:gravity="center_horizontal"
-                android:text="@string/no_profile_choosen" />
+                android:text="@string/no_profile" />
         </LinearLayout>
 
         <View

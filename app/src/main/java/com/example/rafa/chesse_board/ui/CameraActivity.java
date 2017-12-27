@@ -143,7 +143,7 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
             super.onCaptureCompleted(session, request, result);
-            Toast.makeText(CameraActivity.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+            Log.i("chess_game", "Saved:" + file);
             createCameraPreview();
         }
     };
@@ -164,7 +164,7 @@ public class CameraActivity extends AppCompatActivity {
     }
     protected void takePicture() {
         if(null == cameraDevice) {
-            Log.e(TAG, "cameraDevice is null");
+            Log.e("chess_game", "cameraDevice is null");
             return;
         }
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
@@ -286,7 +286,7 @@ public class CameraActivity extends AppCompatActivity {
     }
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        Log.e(TAG, "is camera open");
+        Log.e("chess_game", "is camera open");
         try {
             cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
@@ -302,11 +302,11 @@ public class CameraActivity extends AppCompatActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
-        Log.e(TAG, "openCamera X");
+        Log.e("chess_game", "openCamera X");
     }
     protected void updatePreview() {
         if(null == cameraDevice) {
-            Log.e(TAG, "updatePreview error, return");
+            Log.e("chess_game", "updatePreview error, return");
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
         try {
@@ -330,7 +330,8 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // close the app
-                Toast.makeText(CameraActivity.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
+                Log.e("chess_game",
+                        "Sorry!!!, you can't use this app without granting permission.");
                 finish();
             }
         }
@@ -338,7 +339,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG, "onResume");
+        Log.e("chess_game", "onResume CameraActivity");
         startBackgroundThread();
         if (textureView.isAvailable()) {
             openCamera();
@@ -348,7 +349,7 @@ public class CameraActivity extends AppCompatActivity {
     }
     @Override
     protected void onPause() {
-        Log.e(TAG, "onPause");
+        Log.e("chess_game", "onPause CameraActivity");
         //closeCamera();
         stopBackgroundThread();
         super.onPause();

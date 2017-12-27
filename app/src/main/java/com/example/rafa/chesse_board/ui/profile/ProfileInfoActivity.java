@@ -36,8 +36,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
     void addProfile(String name, GameMode gameMode, GameResult result, String imagePath) {
         HashMap<String, Object> hm = new HashMap<>();
         hm.put("nickname", name);
-        hm.put("game_mode",gameMode.toString());
-        hm.put("result",result.toString());
+        hm.put("game_mode", gameMode.toString());
+        hm.put("result", result.toString());
         hm.put("image_path", imagePath);
         gameScores.add(hm);
     }
@@ -48,11 +48,11 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
         db = new DatabaseHandler(this);
         if (db.getProfilesCount() == 0)
-            db.addProfile(new Profile("No Profile", null));
+            db.addProfile(new Profile(getString(R.string.no_profile), null));
 
         profile = db.getPlayerProfile();
 
-        setTitle(profile.getNickName() + "'s Profile");
+        setTitle(profile.getNickName() + getString(R.string.profile_title_s));
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setElevation(0);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -63,8 +63,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
         gameScores = new ArrayList<>();
         List<GameScore> scores = db.getAllScores();
-        for(GameScore score : scores)
-            addProfile(score.getOpponentNickName(),score.getMode(),score.getResult(),null);
+        for (GameScore score : scores)
+            addProfile(score.getOpponentNickName(), score.getMode(), score.getResult(), null);
 
         ListView lv = (ListView) this.findViewById(R.id.profiles_list);
         lv.setAdapter(new ProfileListAdapter());
@@ -92,7 +92,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setUpListeners(){
+    private void setUpListeners() {
         ImageButton edit = (ImageButton) findViewById(R.id.item_profile_edit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,15 +130,32 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
             ((ImageView) layout.findViewById(R.id.item_profile_picture)).setImageResource(R.drawable.chess_bot);
             ((TextView) layout.findViewById(R.id.item_profile_nickname)).setText(nickname);
-            ((TextView) layout.findViewById(R.id.item_profile_game_mode)).setText(gameMode);
-            ((TextView) layout.findViewById(R.id.item_game_result)).setText(result);
 
+            if (gameMode.equals(GameMode.SINGLE_PLAYER.toString()))
+                ((TextView) layout.findViewById(R.id.item_profile_game_mode))
+                        .setText(getString(R.string.start_single_player));
+            else if(gameMode.equals(GameMode.MULTIPLAYER.toString()))
+                ((TextView) layout.findViewById(R.id.item_profile_game_mode))
+                        .setText(getString(R.string.start_multiplayer));
+            else if(gameMode.equals(GameMode.ONLINE.toString()))
+                ((TextView) layout.findViewById(R.id.item_profile_game_mode))
+                        .setText(gameMode);
+
+            if(result.equals(GameResult.WIN.toString()))
+                ((TextView) layout.findViewById(R.id.item_game_result))
+                        .setText(R.string.win);
+            else if(result.equals(GameResult.LOSE.toString()))
+                ((TextView) layout.findViewById(R.id.item_game_result))
+                        .setText(R.string.lose);
+            else if(result.equals(GameResult.DRAW.toString()))
+                ((TextView) layout.findViewById(R.id.item_game_result))
+                        .setText(R.string.draw);
             notifyDataSetChanged();
             return layout;
         }
     }
 
-    public void updateView(){
+    public void updateView() {
         profile = db.getPlayerProfile();
         String imageFilePath = profile.getImagePath();
         ImageView profilePicture = findViewById(R.id.info_profile_picture);
@@ -146,13 +163,13 @@ public class ProfileInfoActivity extends AppCompatActivity {
             UIUtils.setPic(profilePicture, imageFilePath, getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.set_pic_error), Toast.LENGTH_SHORT).show();
             profilePicture.setImageResource(R.drawable.chess_sporting);
         }
 
         TextView profile_info_nickname = findViewById(R.id.profile_info_nickname);
         profile_info_nickname.setText(profile.getNickName());
-        setTitle(profile.getNickName() + "'s Profile");
+        setTitle(profile.getNickName() + getString(R.string.profile_title_s));
     }
 
     @Override

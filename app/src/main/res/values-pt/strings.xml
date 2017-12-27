@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Chess Game</string>
+    <string name="chess_game_title">Xadrez</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="game">Jogo</string>
+
+    <!-- Start Activity -->
+    <string name="startProfile">Meu Perfil</string>
+    <string name="start_single_player">Jogar Sozinho</string>
+    <string name="start_multiplayer">Multijogador</string>
+    <string name="start_create_game">Criar Jogo</string>
+    <string name="start_join_game">Juntar a Jogo</string>
+
+    <string name="dialog_hint_opponent_name">Nome do Adversário</string>
+    <string name="dialog_title_opponent_name">Nome do Adversário</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="minutes">Minutos</string>
+    <string name="timer">Timer</string>
+    <string name="out_of_range_time">Valor atribuido fora dos Limites</string>
+    <string name="time_not_valid">Valor do tempo não Válido</string>
+
+    <!-- Profile Info Activity -->
+    <string name="tv_score_history">Histórico</string>
+
+    <!-- Profile Editor Activity -->
+    <string name="btn_submit_name">Submeter Nome</string>
+    <string name="no_profile">No Profile</string>
+    <string name="profile_editor_change_name">Submeter Nome</string>
+    <string name="set_pic_error">Erro ao carregar a fotografia</string>
+    <string name="profile_title_s">\ Perfil</string>
+    <string name="nickname_max_size">Nickname não pode ser maior do que 10 letras</string>
+    <string name="nickname_changed">Nickname modificado com sucesso</string>
+
+    <!-- Camera Activity -->
+    <string name="btn_take_picture">Tirar Foto</string>
+
+    <!-- Main Activity -->
+    <string name="tv_player_2">Jogador 2</string>
+
+    <string name="item_flip_board">Virar Tabuleiro</string>
+    <string name="item_give_up">Desistir</string>
+    <string name="game_over">Game Over</string>
+    <string name="exit_title_dialog">Tem a certeza que deseja sair?</string>
+    <string name="exit_message_dialog">Se sair perderá o jogo.</string>
+    <string name="yes">SIM</string>
+    <string name ="no">NÃO</string>
+    <string name="default_opponent_name">Bot</string>
+    <string name ="network_conn_error">Erro de conecção à Rede</string>
+
+    <!-- GameResult -->
+    <string name="win">Ganhou</string>
+    <string name="lose">Perdeu</string>
+    <string name="draw">Empatou</string>
+</resources>

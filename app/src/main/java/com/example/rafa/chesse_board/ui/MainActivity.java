@@ -35,13 +35,8 @@ import com.example.rafa.chesse_board.model.sqlite.DatabaseHandler;
 import com.example.rafa.chesse_board.model.sqlite.GameScore;
 import com.example.rafa.chesse_board.model.sqlite.Profile;
 
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.example.rafa.chesse_board.model.board.BoardUtils.NUM_TILES;
 
@@ -66,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
         db = new DatabaseHandler(this);
         if (db.getProfilesCount() == 0)
-            db.addProfile(new Profile("No Profile", null));
+            db.addProfile(new Profile(getString(R.string.no_profile), null));
 
         profile = db.getPlayerProfile();
 
@@ -103,8 +98,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 ((TextView) findViewById(R.id.countdown)).setVisibility(View.GONE);
                 model.startNewGame(GameMode.ONLINE, profile.getNickName());
             }
-            setTitle(model.getGameMode().toString() + " Game");
-            Toast.makeText(this, "Mode: " + model.getGameMode(), Toast.LENGTH_SHORT).show();
+            Log.i("chess_game","Mode: " + model.getGameMode());
 
 
         }
@@ -188,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     protected void alertDialogEndGame(final String message, final String opponentName,
                                       final GameResult result) {
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-        alertDialog.setTitle("Game Over");
+        alertDialog.setTitle(getString(R.string.game_over));
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
             @Override
@@ -243,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             sourceTile = state.getSourceTile();
             destinationTile = state.getDestinationTile();
             pieceToBeMoved = state.getPieceToBeMoved();
-            Toast.makeText(state, "Get Saved Instance", Toast.LENGTH_SHORT).show();
+            Log.i("chess_game", "Get Saved Instance");
             if(model.getGameMode().equals(GameMode.MULTIPLAYER)) {
                 if (model.getCurrentPlayer().isWhite())
                     setUpCountDown(model.getMillisecondsToFinish());
@@ -594,21 +588,21 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     public void setUpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Are you sure about exit?");
-        builder.setMessage("You lose the game if you exit.");
+        builder.setTitle(getString(R.string.exit_title_dialog));
+        builder.setMessage(R.string.exit_title_dialog);
 
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 String opponentName = model.getOpponentName();
                 if (opponentName == null)
-                    opponentName = "Bot";
+                    opponentName = getString(R.string.default_opponent_name);
                 addGameScore(model.getGameMode(), GameResult.LOSE, opponentName);
             }
         });
 
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -640,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             UIUtils.setPic(profilePicture, imageFilePath,getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();
+            Log.i("chess_game","Could not Set Picture.");
             profilePicture.setImageResource(R.drawable.chess_sporting);
         }
     }
@@ -669,7 +663,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo == null || !networkInfo.isConnected()) {
-            Toast.makeText(this, "Network Connection Error.",
+            Toast.makeText(this, getString(R.string.network_conn_error),
                     Toast.LENGTH_LONG).show();
             finish();
             return;
@@ -678,15 +672,13 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         if (intent != null)
             mode = intent.getStringExtra("online_mode");
         if (mode == null) {
-            Toast.makeText(this, "Game Mode is empty.",
-                    Toast.LENGTH_LONG).show();
+            Log.i("chess_game", "Game Mode is empty.");
             finish();
             return;
         }
         if (!mode.equalsIgnoreCase(GameOnlineMode.CLIENT.toString()) &&
                 !mode.equalsIgnoreCase(GameOnlineMode.SERVER.toString())) {
-            Toast.makeText(this, "Game Mode is wrong.",
-                    Toast.LENGTH_LONG).show();
+            Log.i("chess_game", "Game Mode is wrong.");
             finish();
             return;
         }

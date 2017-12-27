@@ -35,7 +35,7 @@
             android:layout_weight="3"
             android:fontFamily="@font/julius_sans_one"
             android:gravity="center_vertical"
-            android:text="@string/no_profile_choosen"
+            android:text="@string/no_profile"
             android:textSize="24sp" />
 
         <ImageButton
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/julius_sans_one"
             android:gravity="center"
-            android:text="Score History"
+            android:text="@string/tv_score_history"
             android:textSize="20sp" />
 
         <ListView

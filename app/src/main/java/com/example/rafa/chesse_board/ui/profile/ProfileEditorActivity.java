@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -44,7 +45,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
 
         db = new DatabaseHandler(this);
         if (db.getProfilesCount() == 0)
-            db.addProfile(new Profile("No Profile", null));
+            db.addProfile(new Profile(getString(R.string.no_profile), null));
 
         profile = db.getAllProfiles().get(0);
 
@@ -66,11 +67,12 @@ public class ProfileEditorActivity extends AppCompatActivity {
             UIUtils.setPic(profilePicture, imageFilePath, getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.set_pic_error),
+                    Toast.LENGTH_SHORT).show();
             profilePicture.setImageResource(R.drawable.chess_sporting);
         }
 
-        setTitle(profile.getNickName() + "'s Profile");
+        setTitle(profile.getNickName() + getString(R.string.profile_title_s));
     }
 
     @Override
@@ -94,7 +96,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
 
         String str = nickname.getText().toString();
         if (str.length() >= 10) {
-            Toast.makeText(this, "Nickname Can't be larger than 10 letters", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.nickname_max_size), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -103,7 +105,8 @@ public class ProfileEditorActivity extends AppCompatActivity {
         nickname.setText("");
         updateView();
 
-        Toast.makeText(this, "Nickname Successfully changed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.nickname_changed),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -117,7 +120,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
             db.updateProfile(newProfile);
             updateView();
 
-            Toast.makeText(this, imageFilePath, Toast.LENGTH_LONG).show();
+            Log.i("chess_game", imageFilePath);
         }
     }
 

@@ -1,30 +1,53 @@
 <resources>
     <string name="app_name">Chess Game</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="chess_game_title">Chess Game</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="game">Game</string>
 
     <!-- Start Activity -->
-    <string name="no_profile_choosen">No Profile</string>
     <string name="startProfile">My Profile</string>
     <string name="start_single_player">Single Player</string>
     <string name="start_multiplayer">Multiplayer</string>
     <string name="start_create_game">Create Game</string>
     <string name="start_join_game">Join Game</string>
 
-    <!-- Profile Info Activity -->
+    <string name="dialog_hint_opponent_name">Opponent Name</string>
+    <string name="dialog_title_opponent_name">Opponent Name</string>
+    <string name="cancel">Cancel</string>
 
+    <string name="minutes">Minutes</string>
+    <string name="timer">Timer</string>
+    <string name="out_of_range_time">Time Value Out of Range</string>
+    <string name="time_not_valid">Time Value not Valid</string>
+
+    <!-- Profile Info Activity -->
+    <string name="tv_score_history">Score History</string>
 
     <!-- Profile Editor Activity -->
+    <string name="btn_submit_name">Submit</string>
+    <string name="no_profile">No Profile</string>
     <string name="profile_editor_change_name">Submit Name Change</string>
-    <string name="profile_editor_nickname"></string>
+    <string name="set_pic_error">Could not set Picture</string>
+    <string name="profile_title_s">\'s Profile</string>
+    <string name="nickname_max_size">Nickname can\'t be larger than 10 letters.</string>
+    <string name="nickname_changed">Nickname Succefully Changed</string>
 
     <!-- Camera Activity -->
-    <string name="take_picture">Take picture</string>
+    <string name="btn_take_picture">Take picture</string>
 
     <!-- Main Activity -->
+    <string name="tv_player_2">Player 2</string>
+
     <string name="item_flip_board">Flip Board</string>
     <string name="item_give_up">Give Up</string>
+    <string name="game_over">Game Over</string>
+    <string name="exit_title_dialog">Are You Sure about to Exit?</string>
+    <string name="exit_message_dialog">You lose the game, if you exit.</string>
+    <string name="yes">YES</string>
+    <string name ="no">NO</string>
+    <string name="default_opponent_name">Bot</string>
+    <string name ="network_conn_error">Network Connection Error</string>
+
     <!-- GameResult -->
     <string name="win">Win</string>
     <string name="lose">Lose</string>
