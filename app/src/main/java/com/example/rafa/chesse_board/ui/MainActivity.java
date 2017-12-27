@@ -88,18 +88,20 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             model = new Model();
             String temp = getIntent().getStringExtra("game_mode");
             if (temp.equalsIgnoreCase(GameMode.SINGLE_PLAYER.toString())) {
-                ((TextView) findViewById(R.id.countdown)).setVisibility(View.INVISIBLE);
-                model.startNewGame(GameMode.SINGLE_PLAYER);
+                ((TextView) findViewById(R.id.countdown)).setVisibility(View.GONE);
+                model.startNewGame(GameMode.SINGLE_PLAYER, profile.getNickName());
+
             } else if (temp.equalsIgnoreCase(GameMode.MULTIPLAYER.toString())) {
                 String opponentName = getIntent().getStringExtra("opponent_name");
                 int timer = getIntent().getIntExtra("timer", 30);
                 model.setMillisecondsToFinish(timer * 60000);
                 model.setMillisecondsToFinishOpponent(timer * 60000);
-                model.startNewGame(GameMode.MULTIPLAYER, opponentName);
+                model.startNewGame(GameMode.MULTIPLAYER, opponentName, profile.getNickName());
                 setUpCountDown(model.getMillisecondsToFinish());
 
             } else if (temp.equalsIgnoreCase(GameMode.ONLINE.toString())) {
-                model.startNewGame(GameMode.ONLINE);
+                ((TextView) findViewById(R.id.countdown)).setVisibility(View.GONE);
+                model.startNewGame(GameMode.ONLINE, profile.getNickName());
             }
             setTitle(model.getGameMode().toString() + " Game");
             Toast.makeText(this, "Mode: " + model.getGameMode(), Toast.LENGTH_SHORT).show();
@@ -165,10 +167,10 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 if (opponentName == null)
                     opponentName = "Bot";
                 // Player 1 - Profile owner
-                if (model.getCurrentPlayer().isWhite())
+                if (model.getCurrentPlayer().isWhite() && model.getMillisecondsToFinish() < 1)
                     alertDialogEndGame("Your time is over, you Lose!", opponentName, GameResult.LOSE);
                     // Player 2
-                else
+                else if(model.getCurrentPlayer().isBlack() && model.getMillisecondsToFinishOpponent() < 1)
                     alertDialogEndGame("Your opponent time is over, you Won!", opponentName, GameResult.WIN);
             }
         }.start();
@@ -242,10 +244,14 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             destinationTile = state.getDestinationTile();
             pieceToBeMoved = state.getPieceToBeMoved();
             Toast.makeText(state, "Get Saved Instance", Toast.LENGTH_SHORT).show();
-            if (model.getCurrentPlayer().isWhite())
-                setUpCountDown(model.getMillisecondsToFinish());
-            else
-                setUpCountDown(model.getMillisecondsToFinishOpponent());
+            if(model.getGameMode().equals(GameMode.MULTIPLAYER)) {
+                if (model.getCurrentPlayer().isWhite())
+                    setUpCountDown(model.getMillisecondsToFinish());
+                else
+                    setUpCountDown(model.getMillisecondsToFinishOpponent());
+            }else{
+                ((TextView)findViewById(R.id.countdown)).setVisibility(View.GONE);
+            }
         } else {
             //From intent
         }
@@ -353,33 +359,44 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             tiles[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //sourceTile = null;
-                    //destinationTile = null;
-                    //humanMovedPiece = null;
-                    int tileId = Arrays.asList(tiles).indexOf((ImageButton) v);
-                    if (sourceTile == null) {
-                        // firstClick
-                        sourceTile = model.getTile(tileId);
-                        pieceToBeMoved = sourceTile.getPiece();
-                        if (pieceToBeMoved == null || pieceToBeMoved.getPieceAllegiance() != model.getCurrentPlayerAlliance()) {
-                            sourceTile = null;
-                        }
-                    } else {
-                        // secondClick
-                        destinationTile = model.getTile(tileId);
-                        Move.MoveStatus moveStatus = model.makeMove(sourceTile, destinationTile);
-
-                        if (!moveStatus.isDone())
-                            Toast.makeText(getApplicationContext(), moveStatus.toString(), Toast.LENGTH_SHORT).show();
-
-                        sourceTile = null;
-                        destinationTile = null;
-                        pieceToBeMoved = null;
+                    if (model.getGameMode().equals(GameMode.ONLINE) && model.commSettedUp()){
+                        if ((model.getCurrentPlayer().isWhite() && model.amILight()) ||
+                                (model.getCurrentPlayer().isBlack() && model.amIDark()))
+                            onClickListener(v);
                     }
-                    renderGame();
+                    else{
+                        onClickListener(v);
+                    }
                 }
             });
         }
+    }
+
+    private void onClickListener(View v) {
+        int tileId = Arrays.asList(tiles).indexOf((ImageButton) v);
+        if (sourceTile == null) {
+            // firstClick
+            sourceTile = model.getTile(tileId);
+            pieceToBeMoved = sourceTile.getPiece();
+            if (pieceToBeMoved == null || pieceToBeMoved.getPieceAllegiance() != model.getCurrentPlayerAlliance()) {
+                sourceTile = null;
+            }
+        } else {
+            // secondClick
+            destinationTile = model.getTile(tileId);
+            Move.MoveStatus moveStatus = model.makeMove(sourceTile, destinationTile);
+            if (model.getGameMode().equals(GameMode.ONLINE))
+                model.makeMoveClient(sourceTile.getTileCoordinate(),
+                        destinationTile.getTileCoordinate());
+
+            if (!moveStatus.isDone())
+                Toast.makeText(getApplicationContext(), moveStatus.toString(), Toast.LENGTH_SHORT).show();
+
+            sourceTile = null;
+            destinationTile = null;
+            pieceToBeMoved = null;
+        }
+        renderGame();
     }
 
     /**
@@ -500,28 +517,44 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         for (Piece piece : pieces) {
             switch (piece.getPieceType()) {
                 case ROOK:
-                    if (piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack()) {
                         darkRooks--;
-                    else
+                        darkRooks = (darkRooks < 0) ? 0 : darkRooks;
+                    }
+                    else {
                         lightRooks--;
+                        lightRooks = (lightRooks < 0) ? 0 : lightRooks;
+                    }
                     break;
                 case KNIGHT:
-                    if (piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack()) {
                         darkKnights--;
-                    else
+                        darkKnights = (darkKnights < 0) ? 0 : darkKnights;
+                    }
+                    else {
                         lightKnights--;
+                        lightKnights = (lightKnights < 0) ? 0 : lightKnights;
+                    }
                     break;
                 case BISHOP:
-                    if (piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack()) {
                         darkBishops--;
-                    else
+                        darkBishops = (darkBishops < 0) ? 0 : darkKnights;
+                    }
+                    else {
                         lightBishops--;
+                        lightBishops = (lightBishops < 0) ? 0 : lightBishops;
+                    }
                     break;
                 case QUEEN:
-                    if (piece.getPieceAllegiance().isBlack())
+                    if (piece.getPieceAllegiance().isBlack()) {
                         darkQueen--;
-                    else
+                        darkQueen = (darkQueen < 0) ? 0 : darkQueen;
+                    }
+                    else {
                         lightQueen--;
+                        lightQueen = (lightQueen < 0) ? 0 : lightQueen;
+                    }
                     break;
             }
         }
@@ -604,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         String imageFilePath = profile.getImagePath();
         ImageView profilePicture = findViewById(R.id.player_picture);
         try {
-            UIUtils.setPic(profilePicture, imageFilePath);
+            UIUtils.setPic(profilePicture, imageFilePath,getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();

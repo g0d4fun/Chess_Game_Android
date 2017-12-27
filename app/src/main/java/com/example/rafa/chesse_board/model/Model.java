@@ -29,12 +29,12 @@ public class Model {
     }
 
     // Iteration Methods----------------------------------------------------------------------------
-    public Board startNewGame(GameMode gameMode, String opponentName) {
-        return model.startNewGame(gameMode,opponentName);
+    public Board startNewGame(GameMode gameMode, String opponentName, String username) {
+        return model.startNewGame(gameMode,opponentName, username);
     }
 
-    public Board startNewGame(GameMode gameMode) {
-        return model.startNewGame(gameMode);
+    public Board startNewGame(GameMode gameMode, String username) {
+        return model.startNewGame(gameMode, username);
     }
 
     /**
@@ -59,7 +59,13 @@ public class Model {
         return model.pieceLegalMoves(pieceToMove);
     }
 
+    public void setOpponentName(String name){
+        model.setOpponentName(name);
+    }
+
     // Retrieve Data
+    public String getUsername(){return model.getUsername();}
+
     public Board getBoard() {
         return model.getBoard();
     }
@@ -139,6 +145,25 @@ public class Model {
     public boolean commSettedUp(){
         if(communication == null)
             return false;
+        return true;
+    }
+
+    public void makeMoveClient(int sourceTile,int destinationTile){
+        communication.makeMove(sourceTile,destinationTile);
+    }
+
+    public boolean amILight(){
+        // Server is white
+        if(communication.isServer()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean amIDark(){
+        if(communication.isServer()){
+            return false;
+        }
         return true;
     }
 }

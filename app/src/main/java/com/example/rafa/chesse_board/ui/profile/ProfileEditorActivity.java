@@ -63,7 +63,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
         imageFilePath = profile.getImagePath();
 
         try {
-            UIUtils.setPic(profilePicture, imageFilePath);
+            UIUtils.setPic(profilePicture, imageFilePath, getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();

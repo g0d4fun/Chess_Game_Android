@@ -30,7 +30,8 @@ public class InnerModel {
 
     protected ModelChess modelChess;
     protected GameMode gameMode;
-    protected Alliance myAllianceOnline;
+
+    protected String username;
     protected String opponentName;
     protected int millisecondsToFinish;
     protected int millisecondsToFinishOpponent;
@@ -45,12 +46,14 @@ public class InnerModel {
     }
 
     // Iteration Methods----------------------------------------------------------------------------
-    public Board startNewGame(GameMode gameMode, String opponentName) {
+    public Board startNewGame(GameMode gameMode, String opponentName, String username) {
         this.opponentName = opponentName;
-        return startNewGame(gameMode);
+        return startNewGame(gameMode, username);
     }
 
-    public Board startNewGame(GameMode gameMode) {
+    public Board startNewGame(GameMode gameMode,String username) {
+        this.username = username;
+
         switch (gameMode) {
             case SINGLE_PLAYER:
                 this.gameMode = GameMode.SINGLE_PLAYER;
@@ -138,7 +141,16 @@ public class InnerModel {
         return modelChess.pieceLegalMoves(pieceToMove);
     }
 
+    public void setOpponentName(String opponentName) {
+        this.opponentName = opponentName;
+    }
+
     // Retrieve Data
+
+    public String getUsername(){
+        return username;
+    }
+
     public Board getBoard() {
         return modelChess.getBoard();
     }
@@ -194,4 +206,5 @@ public class InnerModel {
     public void setWhiteCountDownTimer(boolean whiteCountDownTimer) {
         isWhiteCountDownTimer = whiteCountDownTimer;
     }
+
 }

@@ -84,6 +84,10 @@ public class ModelChess implements Serializable {
         return Collections.emptyList();
     }
 
+    public boolean isGameDraw(){
+        return false;
+    }
+
     // Retrieve Data
     public Board getBoard() {
         return chessBoard;

@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rafa.chesse_board.R;
@@ -34,7 +35,7 @@ import java.util.Enumeration;
  */
 class OnlineCommunication {
 
-    private static final int PORT = 8899;
+    //private static final int PORT = 8899;
     private static final int PORTaux = 9988; // to test with emulators
 
     MainActivity mainActivity;
@@ -50,8 +51,6 @@ class OnlineCommunication {
 
     BufferedReader input;
     PrintWriter output;
-
-    boolean toRead;
 
     public OnlineCommunication(GameOnlineMode mode,
                                MainActivity mainActivity, Model model) {
@@ -89,7 +88,7 @@ class OnlineCommunication {
             @Override
             public void run() {
                 try {
-                    serverSocket = new ServerSocket(PORT);
+                    serverSocket = new ServerSocket(PORTaux);
                     socketGame = serverSocket.accept();
                     serverSocket.close();
                     serverSocket = null;
@@ -112,8 +111,8 @@ class OnlineCommunication {
     }
 
     void clientDlg() {
-        final EditText edtIP = new EditText(context);
-        edtIP.setText("10.0.2.2"); // emulator's default ip
+        final EditText edtIP = new EditText(mainActivity);
+        edtIP.setText(/*"10.0.2.2"*/"192.168.1.4"); // emulator's default ip
         AlertDialog ad = new AlertDialog.Builder(mainActivity).setTitle("RPS Client")
                 .setMessage("Server IP").setView(edtIP)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
@@ -124,6 +123,7 @@ class OnlineCommunication {
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
+                        Log.i("chess_game","onCancelListener");
                         mainActivity.finish();
                     }
                 }).create();
@@ -135,15 +135,17 @@ class OnlineCommunication {
             @Override
             public void run() {
                 try {
-                    Log.d("RPS", "Connecting to the server  " + strIP);
                     socketGame = new Socket(strIP, Port);
                 } catch (Exception e) {
                     socketGame = null;
+                    Log.i("chess_game","Client Socket Exception");
+                    mainActivity.finish();
                 }
                 if (socketGame == null) {
                     procMsg.post(new Runnable() {
                         @Override
                         public void run() {
+                            Log.i("chess_game","Socket is null");
                             mainActivity.finish();
                         }
                     });
@@ -162,18 +164,39 @@ class OnlineCommunication {
                 input = new BufferedReader(new InputStreamReader(
                         socketGame.getInputStream()));
                 output = new PrintWriter(socketGame.getOutputStream());
+
+                output.println(model.getUsername());
+                output.flush();
+                Log.i("chess_game","Send Username: " + model.getUsername());
+                final String opponentName = input.readLine();
+                model.setOpponentName(opponentName);
+                Log.i("chess_game","Received Opponent Name: " + model.getOpponentName());
+                procMsg.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(isServer()) {
+                            ((TextView) (mainActivity.findViewById(R.id.Player2))).setText(opponentName);
+                        }else if(isClient()){
+                            ((TextView)(mainActivity.findViewById(R.id.Player2))).setText(model.getUsername());
+                            ((TextView) (mainActivity.findViewById(R.id.Player1))).setText(opponentName);
+                        }
+                    }
+                });
                 while (!Thread.currentThread().isInterrupted()) {
                     String read = input.readLine();
                     String read2 = input.readLine();
-                    final int move = Integer.parseInt(read);
-                    final int move2 = Integer.parseInt(read);
-                    Log.d("RPS", "Received: " + move);
+                    final int source = Integer.parseInt(read);
+                    final int destination = Integer.parseInt(read2);
+                    Log.i("chess_game", "Received: " + source +
+                            " " + destination);
                     procMsg.post(new Runnable() {
                         @Override
                         public void run() {
                             // PLAY!!!
                             // moveOtherPlayer(move);
-                            model.makeMove(move,move2);
+                            Log.i("chess_game","MakeMove");
+                            model.makeMove(source,destination);
+                            mainActivity.renderGame();
                         }
                     });
                 }
@@ -181,8 +204,8 @@ class OnlineCommunication {
                 procMsg.post(new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("chess_game","commThread Exception");
                         mainActivity.finish();
-                        Toast.makeText(context, "Game Finished", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -203,6 +226,7 @@ class OnlineCommunication {
         input = null;
         output = null;
         socketGame = null;
+        Log.i("chess_game","onPause");
     }
 
     public void onResume() {
@@ -210,6 +234,7 @@ class OnlineCommunication {
             server();
         else  // CLIENT
             clientDlg();
+        Log.i("chess_game","onResume");
     }
 
     public static String getLocalIpAddress() {
@@ -245,10 +270,17 @@ class OnlineCommunication {
         return false;
     }
 
-    public void makeMove(int sourceTile,int destinationTile){
-        output.println(sourceTile);
-        output.flush();
-        output.println(destinationTile);
-        output.flush();
+    public void makeMove(final int sourceTile,final int destinationTile){
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                output.println(sourceTile);
+                output.flush();
+                output.println(destinationTile);
+                output.flush();
+                Log.i("chess_game","Sent: " + sourceTile + " " + destinationTile + ".");
+            }
+        });
+        t.start();
     }
 }

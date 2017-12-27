@@ -143,7 +143,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
         String imageFilePath = profile.getImagePath();
         ImageView profilePicture = findViewById(R.id.info_profile_picture);
         try {
-            UIUtils.setPic(profilePicture, imageFilePath);
+            UIUtils.setPic(profilePicture, imageFilePath, getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Could not Set Picture.", Toast.LENGTH_SHORT).show();
