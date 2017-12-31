@@ -113,7 +113,7 @@ class OnlineCommunication {
     void clientDlg() {
         final EditText edtIP = new EditText(mainActivity);
         edtIP.setText(/*"10.0.2.2"*/"192.168.1.4"); // emulator's default ip
-        AlertDialog ad = new AlertDialog.Builder(mainActivity).setTitle("RPS Client")
+        AlertDialog ad = new AlertDialog.Builder(mainActivity).setTitle(mainActivity.getString(R.string.chess_game_title) + " Client")
                 .setMessage("Server IP").setView(edtIP)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
