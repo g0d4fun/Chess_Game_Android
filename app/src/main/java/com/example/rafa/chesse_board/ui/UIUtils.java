@@ -26,31 +26,6 @@ import static java.lang.System.out;
 public abstract class UIUtils {
 
     public static void setPic(ImageView mImageView, String mCurrentPhotoPath, Context context) {
-        /*// Get the dimensions of the View
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions); // existem outros. Ex: decodeStream
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-        */
-
-        /*
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-        mImageView.setImageBitmap(bitmap); //em alternativa retornar apenas o Bitmap
-        */
         Bitmap d = new BitmapDrawable(context.getResources() ,mCurrentPhotoPath).getBitmap();
         int nh = (int) ( d.getHeight() * (512.0 / d.getWidth()) );
         Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);

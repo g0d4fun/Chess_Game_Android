@@ -15,6 +15,7 @@
         android:layout_marginBottom="64dp"
         android:fontFamily="@font/julius_sans_one"
         android:gravity="center"
+        android:onClick="onClickLaunchCredits"
         android:text="@string/chess_game_title"
         android:textColor="@color/DARK_TILE_COLOR_HEX"
         android:textSize="40sp"
@@ -179,5 +180,4 @@
             android:layout_height="match_parent"
             android:background="@color/DARK_TILE_COLOR_HEX" />
     </LinearLayout>
-
 </LinearLayout>

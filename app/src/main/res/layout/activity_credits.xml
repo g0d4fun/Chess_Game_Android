@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/startBackground"
+    android:orientation="vertical"
+    tools:context="com.example.rafa.chesse_board.ui.StartActivity">
+
+    <ImageView
+        android:paddingTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/isec"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/julius_sans_one"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/developed_by"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:fontFamily="@font/julius_sans_one"
+            android:paddingLeft="40dp"
+
+            android:text="@string/student_one"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:fontFamily="@font/julius_sans_one"
+            android:paddingLeft="40dp"
+
+            android:text="@string/student_one_address"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/julius_sans_one"
+            android:gravity="bottom"
+            android:paddingLeft="40dp"
+            android:text="@string/student_two"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:layout_weight="1"
+            android:fontFamily="@font/julius_sans_one"
+            android:paddingLeft="40dp"
+            android:text="@string/student_two_address"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:fontFamily="@font/julius_sans_one"
+            android:paddingLeft="10dp"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:paddingTop="20dp"
+            android:text="@string/description"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
+</LinearLayout>

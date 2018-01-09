@@ -5,7 +5,9 @@
     <item
         android:id="@+id/item_flip_board"
         android:title="@string/item_flip_board" />
-
+    <item
+        android:id="@+id/item_opponent_exit"
+        android:title="Opponent Give Up" />
     <item
         android:id="@+id/item_give_up"
         android:title="@string/item_give_up" />

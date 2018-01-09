@@ -37,6 +37,10 @@ public class Model {
         return model.startNewGame(gameMode, username);
     }
 
+    public boolean changeGameModeMultiToSingle(){
+        return model.changeGameModeMultiToSingle();
+    };
+
     /**
      * @param sourceTile
      * @param destinationTile

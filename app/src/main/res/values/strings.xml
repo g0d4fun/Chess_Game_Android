@@ -44,12 +44,18 @@
     <string name="exit_title_dialog">Are You Sure about to Exit?</string>
     <string name="exit_message_dialog">You lose the game, if you exit.</string>
     <string name="yes">YES</string>
-    <string name ="no">NO</string>
+    <string name="no">NO</string>
     <string name="default_opponent_name">Bot</string>
-    <string name ="network_conn_error">Network Connection Error</string>
+    <string name="network_conn_error">Network Connection Error</string>
 
     <!-- GameResult -->
     <string name="win">Win</string>
     <string name="lose">Lose</string>
     <string name="draw">Draw</string>
+    <string name="developed_by">Developed by</string>
+    <string name="student_one">Hugo Santos 21250593</string>
+    <string name="student_one_address">21250593@isec.pt</string>
+    <string name="student_two">Rafael Henriques 21250203</string>
+    <string name="student_two_address">21250203@isec.pt</string>
+    <string name="description">Practical Work performed to Arquiteturas Móveis Subject</string>
 </resources>

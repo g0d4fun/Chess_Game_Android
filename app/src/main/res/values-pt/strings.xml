@@ -52,4 +52,10 @@
     <string name="win">Ganhou</string>
     <string name="lose">Perdeu</string>
     <string name="draw">Empatou</string>
+    <string name="developed_by">Desenvolvido Por</string>
+    <string name="student_one">Hugo Santos 21250593</string>
+    <string name="student_one_address">21250593@isec.pt</string>
+    <string name="student_two">Rafael Henriques 21250203</string>
+    <string name="student_two_address">21250203@isec.pt</string>
+    <string name="description">Trabalho Prático Realizado no Âmbito da Cadeira de Arquiteturas Móveis</string>
 </resources>

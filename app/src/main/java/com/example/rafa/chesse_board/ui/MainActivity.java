@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
     private AlertDialog alert;
 
+    private CountDownTimer countDownTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 ((TextView) findViewById(R.id.countdown)).setVisibility(View.GONE);
                 model.startNewGame(GameMode.ONLINE, profile.getNickName());
             }
-            Log.i("chess_game","Mode: " + model.getGameMode());
+            Log.i("chess_game", "Mode: " + model.getGameMode());
 
 
         }
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
      */
     private void setUpCountDown(final long milliseconds) {
 
-        new CountDownTimer(milliseconds, 1000) {
+        countDownTimer = new CountDownTimer(milliseconds, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long minutesLeft = (millisUntilFinished / 1000) / 60;
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 if (model.getCurrentPlayer().isWhite() && model.getMillisecondsToFinish() < 1)
                     alertDialogEndGame("Your time is over, you Lose!", opponentName, GameResult.LOSE);
                     // Player 2
-                else if(model.getCurrentPlayer().isBlack() && model.getMillisecondsToFinishOpponent() < 1)
+                else if (model.getCurrentPlayer().isBlack() && model.getMillisecondsToFinishOpponent() < 1)
                     alertDialogEndGame("Your opponent time is over, you Won!", opponentName, GameResult.WIN);
             }
         }.start();
@@ -204,23 +206,6 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_flip_board:
-                Toast.makeText(this, "Flip Board", Toast.LENGTH_SHORT).show();
-                direction = direction.opposite();
-                renderGame();
-                break;
-            case R.id.item_give_up:
-                Toast.makeText(this, "Given Up", Toast.LENGTH_SHORT).show();
-                alert.show();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater mi = getMenuInflater();
         mi.inflate(R.menu.menu_game, menu);
@@ -238,13 +223,13 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             destinationTile = state.getDestinationTile();
             pieceToBeMoved = state.getPieceToBeMoved();
             Log.i("chess_game", "Get Saved Instance");
-            if(model.getGameMode().equals(GameMode.MULTIPLAYER)) {
+            if (model.getGameMode().equals(GameMode.MULTIPLAYER)) {
                 if (model.getCurrentPlayer().isWhite())
                     setUpCountDown(model.getMillisecondsToFinish());
                 else
                     setUpCountDown(model.getMillisecondsToFinishOpponent());
-            }else{
-                ((TextView)findViewById(R.id.countdown)).setVisibility(View.GONE);
+            } else {
+                ((TextView) findViewById(R.id.countdown)).setVisibility(View.GONE);
             }
         } else {
             //From intent
@@ -353,12 +338,11 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             tiles[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (model.getGameMode().equals(GameMode.ONLINE) && model.commSettedUp()){
+                    if (model.getGameMode().equals(GameMode.ONLINE) && model.commSettedUp()) {
                         if ((model.getCurrentPlayer().isWhite() && model.amILight()) ||
                                 (model.getCurrentPlayer().isBlack() && model.amIDark()))
                             onClickListener(v);
-                    }
-                    else{
+                    } else {
                         onClickListener(v);
                     }
                 }
@@ -514,8 +498,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                     if (piece.getPieceAllegiance().isBlack()) {
                         darkRooks--;
                         darkRooks = (darkRooks < 0) ? 0 : darkRooks;
-                    }
-                    else {
+                    } else {
                         lightRooks--;
                         lightRooks = (lightRooks < 0) ? 0 : lightRooks;
                     }
@@ -524,8 +507,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                     if (piece.getPieceAllegiance().isBlack()) {
                         darkKnights--;
                         darkKnights = (darkKnights < 0) ? 0 : darkKnights;
-                    }
-                    else {
+                    } else {
                         lightKnights--;
                         lightKnights = (lightKnights < 0) ? 0 : lightKnights;
                     }
@@ -534,8 +516,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                     if (piece.getPieceAllegiance().isBlack()) {
                         darkBishops--;
                         darkBishops = (darkBishops < 0) ? 0 : darkKnights;
-                    }
-                    else {
+                    } else {
                         lightBishops--;
                         lightBishops = (lightBishops < 0) ? 0 : lightBishops;
                     }
@@ -544,8 +525,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                     if (piece.getPieceAllegiance().isBlack()) {
                         darkQueen--;
                         darkQueen = (darkQueen < 0) ? 0 : darkQueen;
-                    }
-                    else {
+                    } else {
                         lightQueen--;
                         lightQueen = (lightQueen < 0) ? 0 : lightQueen;
                     }
@@ -586,7 +566,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
     }
 
     public void setUpDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(getString(R.string.exit_title_dialog));
         builder.setMessage(R.string.exit_title_dialog);
@@ -610,6 +590,33 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
                 dialog.dismiss();
             }
         });
+        if (model.getGameMode().equals(GameMode.MULTIPLAYER)
+                || model.getGameMode().equals(GameMode.ONLINE)) {
+            builder.setNeutralButton("Continue Alone", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    if (model.getGameMode().equals(GameMode.MULTIPLAYER)) {
+                        model.changeGameModeMultiToSingle();
+                        if (countDownTimer != null) {
+                            countDownTimer.cancel();
+                            countDownTimer = null;
+                        }
+                        model.setMillisecondsToFinishOpponent(0);
+                        model.setMillisecondsToFinish(0);
+                        model.setOpponentName("Became Bot");
+                        ((TextView) findViewById(R.id.Player2)).setText(model.getOpponentName());
+                        ((TextView) findViewById(R.id.countdown)).setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, "Single Player \n Without Player", Toast.LENGTH_SHORT).show();
+                        alert.dismiss();
+                        setUpDialog();
+                    } else if (model.getGameMode().equals(GameMode.ONLINE)) {
+                        Toast.makeText(MainActivity.this, "Not Implemented", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
         alert = builder.create();
     }
 
@@ -631,10 +638,10 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         String imageFilePath = profile.getImagePath();
         ImageView profilePicture = findViewById(R.id.player_picture);
         try {
-            UIUtils.setPic(profilePicture, imageFilePath,getApplicationContext());
+            UIUtils.setPic(profilePicture, imageFilePath, getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
-            Log.i("chess_game","Could not Set Picture.");
+            Log.i("chess_game", "Could not Set Picture.");
             profilePicture.setImageResource(R.drawable.chess_sporting);
         }
     }
@@ -647,7 +654,6 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         }
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -655,6 +661,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
             model.onPauseCommunication();
         }
     }
+
     //Communication -------------------------------------------------------------------------
 
     protected void setUpOnlineGame(Intent intent) {

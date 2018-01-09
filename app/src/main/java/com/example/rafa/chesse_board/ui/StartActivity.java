@@ -83,7 +83,7 @@ public class StartActivity extends AppCompatActivity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String url = txtUrl.getText().toString();
-                        if(url.length() <= 2){
+                        if (url.length() <= 2) {
                             getOpponentNameIntentDialog();
                             return;
                         }
@@ -110,13 +110,13 @@ public class StartActivity extends AppCompatActivity {
                         String url = txtUrl.getText().toString();
                         try {
                             int timer = Integer.parseInt(url);
-                            if(timer < 10 || timer > 120) {
+                            if (timer < 10 || timer > 120) {
                                 intent = null;
                                 Toast.makeText(StartActivity.this,
                                         getString(R.string.out_of_range_time), Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            intent.putExtra("timer",timer);
+                            intent.putExtra("timer", timer);
                             startActivity(intent);
                         } catch (Exception e) {
                             intent = null;
@@ -132,6 +132,11 @@ public class StartActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    protected void onClickLaunchCredits(View v){
+        Intent intent = new Intent(this, CreditsActivity.class);
+        startActivity(intent);
     }
 
     protected void onClickOnline(View v) {

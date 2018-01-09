@@ -51,7 +51,7 @@ public class InnerModel {
         return startNewGame(gameMode, username);
     }
 
-    public Board startNewGame(GameMode gameMode,String username) {
+    public Board startNewGame(GameMode gameMode, String username) {
         this.username = username;
 
         switch (gameMode) {
@@ -68,6 +68,16 @@ public class InnerModel {
         return modelChess.startNewGame();
     }
 
+    public boolean changeGameModeMultiToSingle() {
+        if (!gameMode.equals(GameMode.MULTIPLAYER))
+            return false;
+
+        gameMode = GameMode.SINGLE_PLAYER;
+        if (getCurrentPlayer().isBlack())
+            makeBotMove();
+        return true;
+    }
+
     /**
      * @param sourceTile
      * @param destinationTile
@@ -79,11 +89,10 @@ public class InnerModel {
             case SINGLE_PLAYER:
                 if (getCurrentPlayer().isWhite()) {
                     moveStatus = modelChess.makeMove(sourceTile, destinationTile);
-                    if(moveStatus.equals(MoveStatus.DONE))
+                    if (moveStatus.equals(MoveStatus.DONE))
                         makeBotMove();
                     return moveStatus;
-                }
-                else {
+                } else {
                     //TODO: Bot Turn
                 }
                 break;
@@ -91,35 +100,35 @@ public class InnerModel {
                 return modelChess.makeMove(sourceTile, destinationTile);
             case ONLINE:
                 //if(myAllianceOnline.equals(getCurrentPlayerAlliance())){
-                    return modelChess.makeMove(sourceTile,destinationTile);
-                //}
-                //else{
-                    //TODO: Opponent Turn
-                //}
-                //break;
+                return modelChess.makeMove(sourceTile, destinationTile);
+            //}
+            //else{
+            //TODO: Opponent Turn
+            //}
+            //break;
         }
         return MoveStatus.ILLEGAL_MOVE;
     }
 
-    private MoveStatus makeBotMove(){
-        if(!gameMode.equals(GameMode.SINGLE_PLAYER))
+    private MoveStatus makeBotMove() {
+        if (!gameMode.equals(GameMode.SINGLE_PLAYER))
             return MoveStatus.ILLEGAL_MOVE;
 
         MoveStatus moveStatus = MoveStatus.ILLEGAL_MOVE;
         Tile sourceTile, destinationTile;
-        do{
+        do {
             List<Piece> blackPieces = getBoard().getBlackPieces();
-            int random = (int)(Math.random() * blackPieces.size());
+            int random = (int) (Math.random() * blackPieces.size());
             Piece piece = blackPieces.get(random);
             sourceTile = getBoard().getTile(piece.getPiecePosition());
 
             List<Move> moves = new ArrayList<>(piece.calculateLegalMoves(getBoard()));
-            if(moves.isEmpty())
+            if (moves.isEmpty())
                 continue;
-            int random2 = (int)(Math.random() * moves.size());
+            int random2 = (int) (Math.random() * moves.size());
             destinationTile = getBoard().getTile(moves.get(random2).getDestinationCoordinate());
-            moveStatus = modelChess.makeMove(sourceTile,destinationTile);
-        }while(!moveStatus.equals(MoveStatus.DONE));
+            moveStatus = modelChess.makeMove(sourceTile, destinationTile);
+        } while (!moveStatus.equals(MoveStatus.DONE));
 
         return moveStatus;
     }
@@ -147,7 +156,7 @@ public class InnerModel {
 
     // Retrieve Data
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 

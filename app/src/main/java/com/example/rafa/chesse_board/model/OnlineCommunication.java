@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -17,10 +19,13 @@ import com.example.rafa.chesse_board.R;
 import com.example.rafa.chesse_board.ui.MainActivity;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -283,4 +288,20 @@ class OnlineCommunication {
         });
         t.start();
     }
+
+    /*public void sendBitmap(Bitmap bitmap) throws IOException {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        OutputStream out = socketGame.getOutputStream();
+        DataOutputStream dos = new DataOutputStream(out);
+        dos.writeInt(byteArray.length);
+        dos.write(byteArray, 0, byteArray.length);
+
+    }
+
+    public Bitmap readBitmap(){
+        Bitmap breceived = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+    }*/
 }
