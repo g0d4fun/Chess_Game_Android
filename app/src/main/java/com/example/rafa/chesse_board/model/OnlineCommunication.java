@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +20,9 @@ import com.example.rafa.chesse_board.R;
 import com.example.rafa.chesse_board.ui.MainActivity;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,6 +60,11 @@ class OnlineCommunication {
     BufferedReader input;
     PrintWriter output;
 
+    DataOutputStream outputPictureAsArray;
+    DataInputStream inputPictureAsArray;
+
+    Bitmap bitmap;
+
     public OnlineCommunication(GameOnlineMode mode,
                                MainActivity mainActivity, Model model) {
         this.mode = mode;
@@ -66,6 +74,8 @@ class OnlineCommunication {
         this.mainActivity = mainActivity;
         this.context = mainActivity.getApplicationContext();
         this.model = model;
+
+        bitmap = null;
     }
 
     public void server() {
@@ -76,6 +86,7 @@ class OnlineCommunication {
         pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
+                Log.i("chess_game", "Game Canceled");
                 mainActivity.finish();
                 if (serverSocket != null) {
                     try {
@@ -106,8 +117,10 @@ class OnlineCommunication {
                     @Override
                     public void run() {
                         pd.dismiss();
-                        if (socketGame == null)
+                        if (socketGame == null) {
+                            Log.i("chess_game", "Socket is Null");
                             mainActivity.finish();
+                        }
                     }
                 });
             }
@@ -128,7 +141,7 @@ class OnlineCommunication {
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        Log.i("chess_game","onCancelListener");
+                        Log.i("chess_game", "onCancelListener");
                         mainActivity.finish();
                     }
                 }).create();
@@ -143,14 +156,14 @@ class OnlineCommunication {
                     socketGame = new Socket(strIP, Port);
                 } catch (Exception e) {
                     socketGame = null;
-                    Log.i("chess_game","Client Socket Exception");
+                    Log.i("chess_game", "Client Socket Exception");
                     mainActivity.finish();
                 }
                 if (socketGame == null) {
                     procMsg.post(new Runnable() {
                         @Override
                         public void run() {
-                            Log.i("chess_game","Socket is null");
+                            Log.i("chess_game", "Socket is null");
                             mainActivity.finish();
                         }
                     });
@@ -166,25 +179,43 @@ class OnlineCommunication {
         @Override
         public void run() {
             try {
+                // ----------------------------
+
+                inputPictureAsArray = new DataInputStream(socketGame.getInputStream());
+                outputPictureAsArray = new DataOutputStream(socketGame.getOutputStream());
+
+                outputPictureAsArray.writeInt(model.getMyPhoto().length);
+                outputPictureAsArray.write(model.getMyPhoto());
+                int length = inputPictureAsArray.readInt(); // write length of the message
+                if (length > 0) {
+                    byte[] picture = new byte[length];
+                    inputPictureAsArray.readFully(picture, 0, picture.length);
+                    model.setOpponentPhoto(picture);
+                    bitmap = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+
+                }
+                // ----------------------------
                 input = new BufferedReader(new InputStreamReader(
                         socketGame.getInputStream()));
                 output = new PrintWriter(socketGame.getOutputStream());
 
                 output.println(model.getUsername());
                 output.flush();
-                Log.i("chess_game","Send Username: " + model.getUsername());
+                Log.i("chess_game", "Send Username: " + model.getUsername());
                 final String opponentName = input.readLine();
                 model.setOpponentName(opponentName);
-                Log.i("chess_game","Received Opponent Name: " + model.getOpponentName());
+                Log.i("chess_game", "Received Opponent Name: " + model.getOpponentName());
                 procMsg.post(new Runnable() {
                     @Override
                     public void run() {
-                        if(isServer()) {
+                        if (isServer()) {
                             ((TextView) (mainActivity.findViewById(R.id.Player2))).setText(opponentName);
-                        }else if(isClient()){
-                            ((TextView)(mainActivity.findViewById(R.id.Player2))).setText(model.getUsername());
+                        } else if (isClient()) {
+                            ((TextView) (mainActivity.findViewById(R.id.Player2))).setText(model.getUsername());
                             ((TextView) (mainActivity.findViewById(R.id.Player1))).setText(opponentName);
                         }
+                        if (bitmap != null)
+                            ((ImageView) (mainActivity.findViewById(R.id.opponent_picture))).setImageBitmap(bitmap);
                     }
                 });
                 while (!Thread.currentThread().isInterrupted()) {
@@ -199,8 +230,8 @@ class OnlineCommunication {
                         public void run() {
                             // PLAY!!!
                             // moveOtherPlayer(move);
-                            Log.i("chess_game","MakeMove");
-                            model.makeMove(source,destination);
+                            Log.i("chess_game", "MakeMove");
+                            model.makeMove(source, destination);
                             mainActivity.renderGame();
                         }
                     });
@@ -209,7 +240,7 @@ class OnlineCommunication {
                 procMsg.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("chess_game","commThread Exception");
+                        Log.i("chess_game", "commThread Exception");
                         mainActivity.finish();
                     }
                 });
@@ -231,7 +262,7 @@ class OnlineCommunication {
         input = null;
         output = null;
         socketGame = null;
-        Log.i("chess_game","onPause");
+        Log.i("chess_game", "onPause");
     }
 
     public void onResume() {
@@ -239,7 +270,7 @@ class OnlineCommunication {
             server();
         else  // CLIENT
             clientDlg();
-        Log.i("chess_game","onResume");
+        Log.i("chess_game", "onResume");
     }
 
     public static String getLocalIpAddress() {
@@ -275,7 +306,7 @@ class OnlineCommunication {
         return false;
     }
 
-    public void makeMove(final int sourceTile,final int destinationTile){
+    public void makeMove(final int sourceTile, final int destinationTile) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -283,25 +314,9 @@ class OnlineCommunication {
                 output.flush();
                 output.println(destinationTile);
                 output.flush();
-                Log.i("chess_game","Sent: " + sourceTile + " " + destinationTile + ".");
+                Log.i("chess_game", "Sent: " + sourceTile + " " + destinationTile + ".");
             }
         });
         t.start();
     }
-
-    /*public void sendBitmap(Bitmap bitmap) throws IOException {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-
-        OutputStream out = socketGame.getOutputStream();
-        DataOutputStream dos = new DataOutputStream(out);
-        dos.writeInt(byteArray.length);
-        dos.write(byteArray, 0, byteArray.length);
-
-    }
-
-    public Bitmap readBitmap(){
-        Bitmap breceived = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-    }*/
 }

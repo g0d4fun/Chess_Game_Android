@@ -5,6 +5,8 @@
  */
 package com.example.rafa.chesse_board.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.rafa.chesse_board.model.board.Board;
@@ -23,9 +25,13 @@ public class Model {
 
     private InnerModel model;
     private OnlineCommunication communication;
+    private byte[] opponentPhoto;
+    private byte[] myPhoto;
 
     public Model() {
         model = new InnerModel();
+        opponentPhoto = null;
+        myPhoto = null;
     }
 
     // Iteration Methods----------------------------------------------------------------------------
@@ -169,5 +175,21 @@ public class Model {
             return false;
         }
         return true;
+    }
+
+    public byte[] getOpponentPhoto() {
+        return opponentPhoto;
+    }
+
+    public void setOpponentPhoto(byte[] opponentPhoto) {
+        this.opponentPhoto = opponentPhoto;
+    }
+
+    public byte[] getMyPhoto() {
+        return myPhoto;
+    }
+
+    public void setMyPhoto(byte[] myPhoto) {
+        this.myPhoto = myPhoto;
     }
 }

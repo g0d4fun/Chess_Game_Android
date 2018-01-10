@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,6 +31,20 @@ public abstract class UIUtils {
         int nh = (int) ( d.getHeight() * (512.0 / d.getWidth()) );
         Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
         mImageView.setImageBitmap(scaled);
+    }
+
+    public static byte[] bitmapToByteArray(String mCurrentPhotoPath, Context context) {
+        Bitmap d = new BitmapDrawable(context.getResources(), mCurrentPhotoPath).getBitmap();
+        int nh = (int) (d.getHeight() * (512.0 / d.getWidth()));
+        Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        scaled.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public Bitmap byteArrayToBitmap(byte[] byteArray){
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     }
 
     public static Bitmap getPicBitmap(String mCurrentPhotoPath) {

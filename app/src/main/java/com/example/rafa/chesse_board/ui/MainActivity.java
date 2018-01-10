@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("chess_game","onCreate MainActivity");
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
 
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
         if (model.getGameMode().equals(GameMode.ONLINE))
             setUpOnlineGame(getIntent());
+
     }
 
     /**
@@ -203,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         super.onSaveInstanceState(outState);
         ((ApplicationState) getApplication()).save(tiles, model, sourceTile, destinationTile, pieceToBeMoved);
         outState.putBoolean("Save", true);
+        Log.i("chess_game","onSaveInstanceState MainActivity");
     }
 
     @Override
@@ -637,6 +640,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
         profile = db.getPlayerProfile();
         String imageFilePath = profile.getImagePath();
         ImageView profilePicture = findViewById(R.id.player_picture);
+        model.setMyPhoto(UIUtils.bitmapToByteArray(imageFilePath,getApplicationContext()));
         try {
             UIUtils.setPic(profilePicture, imageFilePath, getApplicationContext());
         } catch (Exception e) {
@@ -648,6 +652,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
     @Override
     protected void onResume() {
+        Log.i("chess_game","onPause MainActivity");
         super.onResume();
         if (model.commSettedUp()) {
             model.onResumeCommunication();
@@ -656,6 +661,7 @@ public class MainActivity extends AppCompatActivity implements UIConstants {
 
     @Override
     protected void onPause() {
+        Log.i("chess_game","onPause MainActivity");
         super.onPause();
         if (model.commSettedUp()) {
             model.onPauseCommunication();
